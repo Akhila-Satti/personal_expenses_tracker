@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
-import Budgets from './Budgets.jsx'
+import Budgets from './Budgets.jsx';
+import Expenses from "./Expenses.jsx";
 function App() {
   return (
     <>
@@ -27,7 +28,7 @@ function App() {
       </div>
       <hr></hr>
       <div id="expenses">
-<p>Expenses here Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reprehenderit consectetur velit odio aperiam dolorum atque unde itaque at ducimus fugit, maiores a veritatis aliquam et rerum corrupti recusandae repellendus quis!</p>
+        <Expenses />
       </div>
       </main>
       

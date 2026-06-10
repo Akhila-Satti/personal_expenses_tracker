@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./Budgets.css";
 function Budgets() {
   const [addBudget, setAddBudget] = useState(false);
-  const[initial,setInitial]=useState(true);
+  const [initial, setInitial] = useState(true);
   const [displayBudget, setDisplayBudget] = useState(false);
   const [data, setdata] = useState([]);
   function NewBudget(e) {
@@ -18,7 +18,6 @@ function Budgets() {
     };
     setdata([...data, d]);
     f.reset();
-    
   }
   return (
     <>
@@ -44,7 +43,7 @@ function Budgets() {
           </button>
         </div>
         <div id="res">
-          {initial  && <SetUp />}
+          {initial && <SetUp />}
           {addBudget && <AddBudget NewBudget={NewBudget} />}
           {displayBudget && <DisplayBudget data={data} />}
         </div>
@@ -113,61 +112,62 @@ export function DisplayBudget(props) {
       <thead>
         <tr>
           <th>Budget Name</th>
-        <th>Duration</th>
-        <th>To</th>
-        <th>From</th>
-        <th>Amount</th>
+          <th>Duration</th>
+          <th>To</th>
+          <th>From</th>
+          <th>Amount</th>
         </tr>
-        
       </thead>
       <tbody>
         <Display data={props.data} />
       </tbody>
-      
     </table>
   );
 }
 function Display(props) {
-   if (props.data.length === 0) {
-    return <p>No budgets added yet.</p>;
+  if (props.data.length === 0) {
+    return (
+      <tr colSpan="4">
+        <td>No budgets added yet.</td>
+      </tr>
+    );
   }
   const d = props.data.map((b) => {
-    return(
-    <tr key={b.bn}>
-      <td>{b.bn}</td>
-      <td>{b.duration} days</td>
-      <td>{b.to}</td>
-      <td>{b.from}</td>
-      <td>{b.amount}</td>
-    </tr>
+    return (
+      <tr key={b.bn}>
+        <td>{b.bn}</td>
+        <td>{b.duration} days</td>
+        <td>{b.to}</td>
+        <td>{b.from}</td>
+        <td>{b.amount}</td>
+      </tr>
     );
   });
   return d;
 }
-function SetUp(){
-  const m=new Date().getMonth();
-  const months={
-    0:"January",
-    1:"February",
-    2:"March",
-    3:"April",
-    4:"May",
-    5:"June",
-    6:"July",
-    7:"August",
-    8:"September",
-    9:"October",
-    10:"November",
-    11:"December"
-  }
-  return(
+function SetUp() {
+  const m = new Date().getMonth();
+  const months = {
+    0: "January",
+    1: "February",
+    2: "March",
+    3: "April",
+    4: "May",
+    5: "June",
+    6: "July",
+    7: "August",
+    8: "September",
+    9: "October",
+    10: "November",
+    11: "December",
+  };
+  return (
     <>
-     <h5>Come on !Lets add the budget for this {months[m]}</h5>
-    <h4>Already added?</h4>
-    <p>Add today expense (^///^)</p>
-    <h3> want to edit or delete? less go</h3>
+      <h5>Come on !Lets add the budget for this {months[m]}</h5>
+      <h4>Already added?</h4>
+      <p>Add today expense (^///^)</p>
+      <h3> want to edit or delete? less go</h3>
     </>
-   
   );
 }
 export default Budgets;

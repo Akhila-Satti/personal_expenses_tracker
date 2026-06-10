@@ -1,0 +1,12 @@
+#expensespanel{
+    background-color: rgb(203, 163, 116);
+}
+#expensehandlers{
+    display:flex;
+    flex-direction: row-reverse;
+}
+.iconbtns{
+    width: 20px;
+    height: 20px;
+    border-radius: 10%;
+}
