@@ -1,0 +1,10 @@
+#budgetsbtn{
+    display: flex;
+    flex-direction: row-reverse;
+    
+}
+#budgetspanel{
+    background-color: rgb(164, 144, 113);
+    border-radius: 10px;
+}
+

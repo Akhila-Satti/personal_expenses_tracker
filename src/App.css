@@ -1,0 +1,19 @@
+#title{
+  color:darkred;
+}
+header{
+  background-color: rgb(240, 182, 220);
+  border-radius: 10px;
+  padding:20px;
+}
+nav a{
+  text-decoration: none;
+  margin:20px;
+  color:black;
+}
+#about{
+  font: arial;
+}
+footer{
+  background-color: rgb(244, 244, 207);
+}
