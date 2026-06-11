@@ -1,0 +1,35 @@
+/* The side navigation menu */
+
+
+.sidenav a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #d8a1bd;
+  display: block;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  background-color: #792d2d54;
+}
+
+#navigator1{
+    width:25px;
+    height:25px;
+}
+#navigator2{
+     width:25px;
+    height:25px;
+}
+
+.sidenav {
+  height: 100%; 
+  position: fixed; 
+  z-index: 1; 
+  top: 0; 
+  left: 0;
+  padding-top: 60px;
+  background-color: #8f8b8b;
+}
+

@@ -1,4 +1,4 @@
-#budgetsbtn{
+#budgetssection{
     display: flex;
     flex-direction: row-reverse;
     
@@ -8,3 +8,12 @@
     border-radius: 10px;
 }
 
+.budgetsbtn{
+    border-radius: 5px;
+    margin: 10px;
+}
+
+#budgetsadding input,select{
+    border-radius: 5px;
+    
+}

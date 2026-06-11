@@ -8,7 +8,7 @@ function Expenses() {
     <>
       <div id="expensespanel">
         <div id="expensehandlers">
-          <button
+          <button className="expensesbtn"
             onClick={() => {
               setAddExpense(true);
               setDisplay(false);
@@ -17,7 +17,7 @@ function Expenses() {
             Add Expense
           </button>
 
-          <button
+          <button className="expensesbtn"
             onClick={() => {
               setDisplay(true);
               setAddExpense(false);
@@ -51,7 +51,7 @@ function AddExpense(props) {
   }
 
   return (
-    <form onSubmit={NewExpense}>
+    <form onSubmit={NewExpense} id="addingexpense">
       <table>
         <thead>
           <tr>
@@ -98,7 +98,7 @@ function AddExpense(props) {
               </select>
             </td>
             <td>
-              <button type="submit">Add the expense</button>
+              <button className="expensesbtn" type="submit">Add the expense</button>
             </td>
           </tr>
         </tbody>

@@ -22,8 +22,8 @@ function Budgets() {
   return (
     <>
       <div id="budgetspanel">
-        <div id="budgetsbtn">
-          <button
+        <div id="budgetssection">
+          <button className="budgetsbtn"
             onClick={() => {
               setAddBudget(true);
               setDisplayBudget(false);
@@ -32,7 +32,7 @@ function Budgets() {
           >
             New Budget
           </button>
-          <button
+          <button className="budgetsbtn"
             onClick={() => {
               setDisplayBudget(true);
               setAddBudget(false);
@@ -52,10 +52,10 @@ function Budgets() {
   );
 }
 
-export function AddBudget(props) {
+function AddBudget(props) {
   return (
     <>
-      <form onSubmit={props.NewBudget}>
+      <form onSubmit={props.NewBudget} id="budgetsadding">
         <table>
           <thead>
             <tr>
@@ -84,19 +84,19 @@ export function AddBudget(props) {
           <tbody>
             <tr>
               <td>
-                <input type="text" id="budgetName" name="budgetName" />
+                <input type="text" id="budgetName" name="budgetName" required/>
               </td>
               <td>
-                <input type="date" id="from" name="from" />
+                <input type="date" id="from" name="from" required/>
               </td>
               <td>
-                <input type="date" id="to" name="to" />
+                <input type="date" id="to" name="to" required/>
               </td>
               <td>
-                <input type="number" id="amount" name="amount" />
+                <input type="number" id="amount" name="amount" required/>
               </td>
               <td>
-                <button type="submit">add this budget</button>
+                <button className="budgetsbtn" type="submit">add this budget</button>
               </td>
             </tr>
           </tbody>
@@ -105,8 +105,7 @@ export function AddBudget(props) {
     </>
   );
 }
-
-export function DisplayBudget(props) {
+function DisplayBudget(props) {
   return (
     <table>
       <thead>
