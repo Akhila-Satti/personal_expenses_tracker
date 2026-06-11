@@ -1,18 +1,24 @@
 import "./Login.css";
-function Login() {
+function Login(props) {
   return (
     <>
     <h1>Personal Expenses Tracker</h1>
       <div id="login">
-        <form action="/backendlogin">
-          <label htmlFor="username">UserName</label>
-          <input type="text" id="username" name="username" required />
+        <form onSubmit={()=>{
+          props.setLogin(true);
+        }}>
+          <label htmlFor="login-username">UserName</label>
+          <input type="text" id="login-username" name="username" required autoComplete="true"/>
           <br />
-          <label htmlFor="password">password</label>
-          <input type="password" id="password" name="password" required />
+          <label htmlFor="login-password">password</label>
+          <input type="password" id="login-password" name="password" required />
           <br />
           <button type="submit">Login</button>
         </form>
+        <button onClick={()=>{
+          props.setSignUp(false);
+          props.setLogin(true);
+        }}>Sign Up </button>
         <div id="altlog">
           <h4>Login with</h4>
 

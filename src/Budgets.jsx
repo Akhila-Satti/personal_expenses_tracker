@@ -64,9 +64,7 @@ function AddBudget(props) {
               </th>
 
               <th colSpan="2">
-                <label htmlFor="duration">
-                  Duration<hr></hr>
-                </label>
+                Duration<hr></hr>
               </th>
               <th rowSpan="2">
                 <label htmlFor="amount">Amount</label>
