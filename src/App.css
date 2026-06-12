@@ -1,10 +1,19 @@
 #title{
   color:darkred;
+  
+  
+  height:35px;
+  width: auto;
+  text-align: center;
+  
 }
+
 header{
-  background-color: rgb(240, 182, 220);
-  border-radius: 10px;
-  padding:20px;
+ 
+  width: 100%;
+  margin-bottom: 20px;
+  background-color:  #bcc4e7;
+  
 }
 nav a{
   text-decoration: none;
@@ -15,5 +24,15 @@ nav a{
   font: arial;
 }
 footer{
-  background-color: rgb(244, 244, 207);
+ 
+  width: 100%;
+  background-color: #bcc4e7;
+}
+main{
+  flex:1;
+}
+#headerbar{
+  display:flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }

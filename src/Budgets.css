@@ -1,10 +1,11 @@
 #budgetssection{
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
+    justify-content: flex-end;
     
 }
 #budgetspanel{
-    background-color: rgb(164, 144, 113);
+    background-color: #657e9e;
     border-radius: 10px;
 }
 

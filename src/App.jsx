@@ -35,7 +35,7 @@ function Actual(props){
         <h1 id="title">Personal Expenses Tracker-Made with &hearts;</h1>
       </div>
       <header>
-        <nav>
+        <nav id="headerbar">
           <Sidenav setPage={props.setPage}/>
           <a href="#about" onClick={()=>{
             props.setPage("default")

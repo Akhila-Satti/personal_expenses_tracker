@@ -5,13 +5,13 @@
   padding: 8px;
   text-decoration: none;
   font-size: 25px;
-  color: #d8a1bd;
+  color:  #030a10;
   display: block;
 }
 
 /* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
-  background-color: #792d2d54;
+  background-color:  #38598b;
 }
 
 #navigator1{
@@ -26,10 +26,10 @@
 .sidenav {
   height: 100%; 
   position: fixed; 
-  z-index: 1; 
+  z-index: 100; 
   top: 0; 
   left: 0;
   padding-top: 60px;
-  background-color: #8f8b8b;
+  background-color: #474c63;
 }
 
