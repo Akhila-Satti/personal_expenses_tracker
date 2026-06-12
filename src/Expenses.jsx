@@ -1,9 +1,8 @@
 import { useState } from "react";
 import "./Expenses.css";
-function Expenses() {
+function Expenses(props) {
   const [addExpense, setAddExpense] = useState(true);
   const [display, setDisplay] = useState(false);
-  const [data, setData] = useState([]);
   return (
     <>
       <div id="expensespanel">
@@ -27,8 +26,8 @@ function Expenses() {
           </button>
         </div>
         <div id="res">
-          {addExpense && <AddExpense data={data} setData={setData} />}
-          {display && <DisplayExpense data={data} setData={setData} />}
+          {addExpense && <AddExpense expensedata={props.expensedata} setExpenseData={props.setExpenseData} budgetnames={props.budgetnames}/>}
+          {display && <DisplayExpense expensedata={props.expensedata} setExpenseData={props.setExpenseData} budgetnames={props.budgetnames}/>}
         </div>
       </div>
     </>
@@ -45,7 +44,7 @@ function AddExpense(props) {
       date: f.date.value,
       budgetname: f.budgetname.value,
     };
-    props.setData([...props.data, d]);
+    props.setExpenseData([...props.expensedata, d]);
     f.reset();
     alert("added succesfully!");
   }
@@ -91,10 +90,11 @@ function AddExpense(props) {
               ></input>
             </td>
             <td>
-              <select id="budgetname" name="budgetname">
+              <select id="budgetname" name="budgetname" required> 
                 <option value="">select a budget</option>
-                <option value="monthly">monthly</option>
-                <option value="yearly">Yearly</option>
+                {
+                  props.budgetnames.map((item)=><option key={item} value={item}>{item}</option>)
+                }
               </select>
             </td>
             <td>
@@ -119,21 +119,21 @@ function DisplayExpense(props) {
         </tr>
       </thead>
       <tbody>
-        <Display data={props.data} setData={props.setData} />
+        <Display expensedata={props.expensedata} setExpenseData={props.setExpenseData} budgetnames={props.budgetnames} />
       </tbody>
     </table>
   );
 }
 function Display(props) {
   const [editExpense, setEditExpense] = useState(null);
-  if (props.data.length === 0) {
+  if (props.expensedata.length === 0) {
     return (
       <tr>
         <td colSpan="4">No data</td>
       </tr>
     );
   }
-  const d = props.data.map((b) => {
+  const d = props.expensedata.map((b) => {
     return (
       <tr key={b.name}>
         <td>{b.name}</td>
@@ -151,7 +151,7 @@ function Display(props) {
         <td>
           <img
             className="iconbtns"
-            onClick={() => DeleteExpense(props.data, props.setData, b.name)}
+            onClick={() => DeleteExpense(props.expensedata, props.setExpenseData, b.name)}
             src="./src/assets/delete.jpeg"
             alt="delete expense"
           ></img>
@@ -164,10 +164,11 @@ function Display(props) {
   } else {
     return (
       <EditExpenses
-        data={props.data}
-        setData={props.setData}
+        expensedata={props.expensedata}
+        setExpenseData={props.setExpenseData}
         expensenametobechanged={editExpense.name}
         setEditExpense={setEditExpense}
+        budgetnames={props.budgetnames}
       />
     );
   }
@@ -183,14 +184,14 @@ function EditExpenses(props) {
       date: f.date.value,
       budgetname: f.budgetname.value,
     };
-    const newData = props.data.map((d) => {
+    const newData = props.expensedata.map((d) => {
       if (d.name === props.expensenametobechanged) {
         return newd;
       } else {
         return d;
       }
     });
-    props.setData(newData);
+    props.setExpenseData(newData);
     props.setEditExpense(null);
   }
   return (
@@ -218,8 +219,9 @@ function EditExpenses(props) {
 
             <select name="budgetname">
               <option value="">select the value</option>
-              <option value="monthly">monthly</option>
-              <option value="yearly">yearly</option>
+              {
+                props.budgetnames.map((item)=><option key={item} value={item}>{item}</option>)
+              }
             </select>
 
             <button type="submit">Submit</button>
@@ -229,7 +231,7 @@ function EditExpenses(props) {
     </>
   );
 }
-function DeleteExpense(data, setData, name) {
-  setData(data.filter((item) => item.name !== name));
+function DeleteExpense(expensedata, setExpenseData, name) {
+  setExpenseData(expensedata.filter((item) => item.name !== name));
 }
 export default Expenses;

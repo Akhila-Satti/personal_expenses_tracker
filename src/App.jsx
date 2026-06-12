@@ -6,14 +6,17 @@ import Sidenav from "./Sidenav.jsx";
 import Login from "./Login.jsx";
 import Signup from "./Signup.jsx";
 function App() {
-  const [page ,setPage]=useState("default");
+  const [budgetdata, setBudgetData] = useState([]);
+  const[page ,setPage]=useState("default");
   const[login,setLogin]=useState(false);
   const[signup,setSignUp]=useState(true);
+  const[budgetnames,setBudgetNames]=useState([]);
+  const [expensedata, setExpenseData] = useState([]);
   return (
     <>
     {!login && <Login setLogin={setLogin} setSignUp={setSignUp}/>}
     {!signup && <Signup setLogin={setLogin} setSignUp={setSignUp}/>}
-   {(login && signup) && <Actual page={page} setPage={setPage } />} 
+   {(login && signup) && <Actual page={page} setPage={setPage } budgetnames={budgetnames} setBudgetNames={setBudgetNames} budgetdata={budgetdata} setBudgetData={setBudgetData} expensedata={expensedata} setExpenseData={setExpenseData}/>} 
 
     </>
   );
@@ -51,8 +54,8 @@ function Actual(props){
       <main id="main">
        
         {(props.page=="default" ) && <Default />}
-      {(props.page==="budgets" ) && <Budgets />}
-     {(props.page==="expenses" ) && <Expenses />}
+      {(props.page==="budgets" ) && <Budgets budgetnames={props.budgetnames} setBudgetNames={props.setBudgetNames} budgetdata={props.budgetdata} setBudgetData={props.setBudgetData}/>}
+     {(props.page==="expenses" ) && <Expenses budgetnames={props.budgetnames} setBudgetNames={props.setBudgetNames} expensedata={props.expensedata} setExpenseData={props.setExpenseData}/>}
       </main>
       
       <footer>

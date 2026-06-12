@@ -1,10 +1,10 @@
 import { useState } from "react";
 import "./Budgets.css";
-function Budgets() {
+function Budgets(props) {
   const [addBudget, setAddBudget] = useState(false);
   const [initial, setInitial] = useState(true);
   const [displayBudget, setDisplayBudget] = useState(false);
-  const [data, setdata] = useState([]);
+  
   function NewBudget(e) {
     e.preventDefault();
     const f = e.target;
@@ -16,7 +16,8 @@ function Budgets() {
       from: f.from.value,
       amount: Number(f.amount.value),
     };
-    setdata([...data, d]);
+    props.setBudgetData([...props.budgetdata, d]);
+    props.setBudgetNames([...props.budgetnames,d.bn]);
     f.reset();
   }
   return (
@@ -45,7 +46,7 @@ function Budgets() {
         <div id="res">
           {initial && <SetUp />}
           {addBudget && <AddBudget NewBudget={NewBudget} />}
-          {displayBudget && <DisplayBudget data={data} />}
+          {displayBudget && <DisplayBudget budgetdata={props.budgetdata} setBudgetData={props.setBudgetData} budgetnames={props.budgetnames} setBudgetNames={props.setBudgetNames}/>}
         </div>
       </div>
     </>
@@ -116,20 +117,20 @@ function DisplayBudget(props) {
         </tr>
       </thead>
       <tbody>
-        <Display data={props.data} />
+        <Display budgetdata={props.budgetdata} setBudgetData={props.setBudgetData} budgetnames={props.budgetnames} setBudgetNames={props.setBudgetNames}/>
       </tbody>
     </table>
   );
 }
 function Display(props) {
-  if (props.data.length === 0) {
+  if (props.budgetdata.length === 0) {
     return (
       <tr colSpan="4">
         <td>No budgets added yet.</td>
       </tr>
     );
   }
-  const d = props.data.map((b) => {
+  const d = props.budgetdata.map((b) => {
     return (
       <tr key={b.bn}>
         <td>{b.bn}</td>
@@ -137,10 +138,20 @@ function Display(props) {
         <td>{b.to}</td>
         <td>{b.from}</td>
         <td>{b.amount}</td>
+        <td><img className="iconbtns" src="./src/assets/edit.jpeg" alt="edit" onClick={EditExpense}></img></td>
+        <td><img className="iconbtns" src="./src/assets/delete.jpeg" alt="delete" onClick={()=>DeleteExpense(props.budgetdata,props.setBudgetData,b.bn,props.budgetnames,props.setBudgetNames)}></img></td>
       </tr>
     );
   });
   return d;
+}
+function EditExpense(){
+  alert("hiii girlll");
+}
+function DeleteExpense(budgetdata,setBudgetData,name,budgetnames,setBudgetNames){
+
+  setBudgetData(budgetdata.filter((i)=>i.bn!==name));
+  setBudgetNames(budgetnames.filter((i)=>i!=name));
 }
 function SetUp() {
   const m = new Date().getMonth();
