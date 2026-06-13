@@ -4,8 +4,10 @@ function Signup(props) {
     <>
     <h1>Personal Expenses Tracker</h1>
       <div id="signup">
-        <form onSubmit={()=>{
+        <form onSubmit={(e)=>{
+          e.preventDefault();
           props.setSignUp(true);
+          
         }}>
         <label htmlFor="firstname">FirstName</label>
           <input type="text" id="firstname" name="firstname" required /><br />

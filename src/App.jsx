@@ -54,8 +54,8 @@ function Actual(props){
       <main id="main">
        
         {(props.page=="default" ) && <Default />}
-      {(props.page==="budgets" ) && <Budgets budgetnames={props.budgetnames} setBudgetNames={props.setBudgetNames} budgetdata={props.budgetdata} setBudgetData={props.setBudgetData}/>}
-     {(props.page==="expenses" ) && <Expenses budgetnames={props.budgetnames} setBudgetNames={props.setBudgetNames} expensedata={props.expensedata} setExpenseData={props.setExpenseData}/>}
+      {(props.page==="budgets" ) && <Budgets budgetnames={props.budgetnames} setBudgetNames={props.setBudgetNames} budgetdata={props.budgetdata} setBudgetData={props.setBudgetData} expensedata={props.expensedata} setExpenseData={props.setExpenseData}/>}
+     {(props.page==="expenses" ) && <Expenses budgetnames={props.budgetnames} setBudgetNames={props.setBudgetNames} expensedata={props.expensedata} setExpenseData={props.setExpenseData} budgetdata={props.budgetdata} setBudgetData={props.setBudgetData}/>}
       </main>
       
       <footer>

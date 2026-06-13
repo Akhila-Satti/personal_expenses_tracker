@@ -7,7 +7,8 @@ function Expenses(props) {
     <>
       <div id="expensespanel">
         <div id="expensehandlers">
-          <button className="expensesbtn"
+          <button
+            className="expensesbtn"
             onClick={() => {
               setAddExpense(true);
               setDisplay(false);
@@ -16,7 +17,8 @@ function Expenses(props) {
             Add Expense
           </button>
 
-          <button className="expensesbtn"
+          <button
+            className="expensesbtn"
             onClick={() => {
               setDisplay(true);
               setAddExpense(false);
@@ -26,8 +28,24 @@ function Expenses(props) {
           </button>
         </div>
         <div id="res">
-          {addExpense && <AddExpense expensedata={props.expensedata} setExpenseData={props.setExpenseData} budgetnames={props.budgetnames}/>}
-          {display && <DisplayExpense expensedata={props.expensedata} setExpenseData={props.setExpenseData} budgetnames={props.budgetnames}/>}
+          {addExpense && (
+            <AddExpense
+              expensedata={props.expensedata}
+              setExpenseData={props.setExpenseData}
+              budgetnames={props.budgetnames}
+              budgetdata={props.budgetdata}
+              setBudgetData={props.setBudgetData}
+            />
+          )}
+          {display && (
+            <DisplayExpense
+              expensedata={props.expensedata}
+              setExpenseData={props.setExpenseData}
+              budgetnames={props.budgetnames}
+              budgetdata={props.budgetdata}
+              setBudgetData={props.setBudgetData}
+            />
+          )}
         </div>
       </div>
     </>
@@ -47,6 +65,18 @@ function AddExpense(props) {
     props.setExpenseData([...props.expensedata, d]);
     f.reset();
     alert("added succesfully!");
+    const updatedBudgets = props.budgetdata.map((b) => {
+      if (b.bn === d.budgetname) {
+        // Return a completely new object copy with safe math overrides
+        return {
+          ...b,
+          spent: (b.spent || 0) + d.amount,
+          remaining: (b.remaining || b.amount) - d.amount,
+        };
+      }
+      return b; // Return un-targeted elements as they were
+    });
+    props.setBudgetData(updatedBudgets);
   }
 
   return (
@@ -90,15 +120,19 @@ function AddExpense(props) {
               ></input>
             </td>
             <td>
-              <select id="budgetname" name="budgetname" required> 
+              <select id="budgetname" name="budgetname" required>
                 <option value="">select a budget</option>
-                {
-                  props.budgetnames.map((item)=><option key={item} value={item}>{item}</option>)
-                }
+                {props.budgetnames.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
               </select>
             </td>
             <td>
-              <button className="expensesbtn" type="submit">Add the expense</button>
+              <button className="expensesbtn" type="submit">
+                Add the expense
+              </button>
             </td>
           </tr>
         </tbody>
@@ -119,7 +153,13 @@ function DisplayExpense(props) {
         </tr>
       </thead>
       <tbody>
-        <Display expensedata={props.expensedata} setExpenseData={props.setExpenseData} budgetnames={props.budgetnames} />
+        <Display
+          expensedata={props.expensedata}
+          setExpenseData={props.setExpenseData}
+          budgetnames={props.budgetnames}
+          budgetdata={props.budgetdata}
+          setBudgetData={props.setBudgetData}
+        />
       </tbody>
     </table>
   );
@@ -151,7 +191,9 @@ function Display(props) {
         <td>
           <img
             className="iconbtns"
-            onClick={() => DeleteExpense(props.expensedata, props.setExpenseData, b.name)}
+            onClick={() =>
+              DeleteExpense(props.expensedata, props.setExpenseData, b.name,b.budgetname,b.amount,props.budgetdata,props.setBudgetData)
+            }
             src="./src/assets/delete.jpeg"
             alt="delete expense"
           ></img>
@@ -167,8 +209,11 @@ function Display(props) {
         expensedata={props.expensedata}
         setExpenseData={props.setExpenseData}
         expensenametobechanged={editExpense.name}
+        expenseamount={editExpense.amount}
         setEditExpense={setEditExpense}
         budgetnames={props.budgetnames}
+        budgetdata={props.budgetdata}
+        setBudgetData={props.setBudgetData}
       />
     );
   }
@@ -191,6 +236,18 @@ function EditExpenses(props) {
         return d;
       }
     });
+    const updatedBudgets = props.budgetdata.map((b) => {
+      if (b.bn === newd.budgetname) {
+        // Return a completely new object copy with safe math overrides
+        return {
+          ...b,
+          spent: (b.spent || 0) + newd.amount-props.expenseamount,
+          remaining: (b.remaining || b.amount) - newd.amount+props.expenseamount,
+        };
+      }
+      return b; // Return un-targeted elements as they were
+    });
+    props.setBudgetData(updatedBudgets);
     props.setExpenseData(newData);
     props.setEditExpense(null);
   }
@@ -219,9 +276,11 @@ function EditExpenses(props) {
 
             <select name="budgetname">
               <option value="">select the value</option>
-              {
-                props.budgetnames.map((item)=><option key={item} value={item}>{item}</option>)
-              }
+              {props.budgetnames.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
             </select>
 
             <button type="submit">Submit</button>
@@ -231,7 +290,19 @@ function EditExpenses(props) {
     </>
   );
 }
-function DeleteExpense(expensedata, setExpenseData, name) {
+function DeleteExpense(expensedata, setExpenseData, name,budgetname,amount,budgetdata,setBudgetData) {
   setExpenseData(expensedata.filter((item) => item.name !== name));
+  const updatedBudgets = budgetdata.map((b) => {
+      if (b.bn === budgetname) {
+        // Return a completely new object copy with safe math overrides
+        return {
+          ...b,
+          spent: (b.spent || 0) - amount,
+          remaining: (b.remaining || b.amount) +amount,
+        };
+      }
+      return b; // Return un-targeted elements as they were
+    });
+    setBudgetData(updatedBudgets);
 }
 export default Expenses;

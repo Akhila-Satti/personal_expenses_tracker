@@ -4,7 +4,8 @@ function Login(props) {
     <>
     <h1>Personal Expenses Tracker</h1>
       <div id="login">
-        <form onSubmit={()=>{
+        <form onSubmit={(e)=>{
+          e.preventDefault();
           props.setLogin(true);
         }}>
           <label htmlFor="login-username">UserName</label>
