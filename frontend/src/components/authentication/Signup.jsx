@@ -1,4 +1,4 @@
-import "../css/Signup.css"
+import "../../css/Signup.css"
 function Signup(props) {
   return (
     <>

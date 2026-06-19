@@ -1,10 +1,10 @@
 import { useState } from "react";
 import "../css/App.css";
-import Budgets from './Budgets.jsx';
-import Expenses from "./Expenses.jsx";
+import Budgets from './budgets/Budgets.jsx';
+import Expenses from "./expenses/Expenses.jsx";
 import Sidenav from "./Sidenav.jsx";
-import Login from "./Login.jsx";
-import Signup from "./Signup.jsx";
+import Login from "./authentication/login.jsx";
+import Signup from "./authentication/Signup.jsx";
 function App() {
   const [budgetdata, setBudgetData] = useState([]);
   const[page ,setPage]=useState("default");
