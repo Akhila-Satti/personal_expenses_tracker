@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Expenses.css";
+import "../css/Expenses.css";
 function Expenses(props) {
   const [addExpense, setAddExpense] = useState(true);
   const [display, setDisplay] = useState(false);
@@ -54,19 +54,25 @@ function Expenses(props) {
 
 function AddExpense(props) {
   function NewExpense(e) {
+    
     e.preventDefault();
     const f = e.target;
+    const resnum=props.budgetnames.filter((i)=>i.id==f.budgetname.value)
     const d = {
+      id:Date.now(),
+      bid:resnum[0].id,
       name: f.ExpenseName.value,
       amount: Number(f.amount.value),
       date: f.date.value,
-      budgetname: f.budgetname.value,
+      budgetname: resnum[0].bn,
     };
+    
     props.setExpenseData([...props.expensedata, d]);
     f.reset();
+    
     alert("added succesfully!");
     const updatedBudgets = props.budgetdata.map((b) => {
-      if (b.bn === d.budgetname) {
+      if (b.id === d.bid) {
         // Return a completely new object copy with safe math overrides
         return {
           ...b,
@@ -123,8 +129,8 @@ function AddExpense(props) {
               <select id="budgetname" name="budgetname" required>
                 <option value="">select a budget</option>
                 {props.budgetnames.map((item) => (
-                  <option key={item} value={item}>
-                    {item}
+                  <option key={item.id} value={item.id}>
+                    {item.bn}
                   </option>
                 ))}
               </select>
@@ -154,6 +160,7 @@ function DisplayExpense(props) {
       </thead>
       <tbody>
         <Display
+
           expensedata={props.expensedata}
           setExpenseData={props.setExpenseData}
           budgetnames={props.budgetnames}
@@ -175,7 +182,7 @@ function Display(props) {
   }
   const d = props.expensedata.map((b) => {
     return (
-      <tr key={b.name}>
+      <tr key={b.id}>
         <td>{b.name}</td>
         <td>{b.amount}</td>
         <td>{b.date}</td>
@@ -192,7 +199,7 @@ function Display(props) {
           <img
             className="iconbtns"
             onClick={() =>
-              DeleteExpense(props.expensedata, props.setExpenseData, b.name,b.budgetname,b.amount,props.budgetdata,props.setBudgetData)
+              DeleteExpense(b.bid,b.id,props.expensedata, props.setExpenseData, b.name,b.budgetname,b.amount,props.budgetdata,props.setBudgetData)
             }
             src="./src/assets/delete.jpeg"
             alt="delete expense"
@@ -206,6 +213,8 @@ function Display(props) {
   } else {
     return (
       <EditExpenses
+        bid={editExpense.bid}
+        id={editExpense.id}
         expensedata={props.expensedata}
         setExpenseData={props.setExpenseData}
         expensenametobechanged={editExpense.name}
@@ -223,30 +232,43 @@ function EditExpenses(props) {
   function ChangeExpense(e) {
     e.preventDefault();
     const f = e.target;
+    let resnum=props.budgetnames.filter((i)=>(i.id)==f.budgetname.value);
+    
     const newd = {
+      id:props.id,
+      bid:resnum[0].id,
       name: f.expensename.value,
       amount: Number(f.amt.value),
       date: f.date.value,
-      budgetname: f.budgetname.value,
+      budgetname: resnum[0].bn,
     };
     const newData = props.expensedata.map((d) => {
-      if (d.name === props.expensenametobechanged) {
+      if (d.id === props.id) {
         return newd;
       } else {
         return d;
       }
     });
     const updatedBudgets = props.budgetdata.map((b) => {
-      if (b.bn === newd.budgetname) {
+      if (b.id === newd.bid) {
         // Return a completely new object copy with safe math overrides
         return {
           ...b,
-          spent: (b.spent || 0) + newd.amount-props.expenseamount,
-          remaining: (b.remaining || b.amount) - newd.amount+props.expenseamount,
+          spent: (b.spent || 0) + newd.amount,
+          remaining: (b.remaining || b.amount) - newd.amount,
         };
+
+      }
+      if(b.id===props.bid){
+        return{
+          ...b,
+         spent: (b.spent || 0) -props.expenseamount,
+          remaining: (b.remaining || b.amount) +props.expenseamount,
+        }
       }
       return b; // Return un-targeted elements as they were
     });
+    
     props.setBudgetData(updatedBudgets);
     props.setExpenseData(newData);
     props.setEditExpense(null);
@@ -277,8 +299,8 @@ function EditExpenses(props) {
             <select name="budgetname">
               <option value="">select the value</option>
               {props.budgetnames.map((item) => (
-                <option key={item} value={item}>
-                  {item}
+                <option key={item.id} value={item.id}>
+                  {item.bn}
                 </option>
               ))}
             </select>
@@ -290,10 +312,10 @@ function EditExpenses(props) {
     </>
   );
 }
-function DeleteExpense(expensedata, setExpenseData, name,budgetname,amount,budgetdata,setBudgetData) {
-  setExpenseData(expensedata.filter((item) => item.name !== name));
+function DeleteExpense(bid,id,expensedata, setExpenseData, name,budgetname,amount,budgetdata,setBudgetData) {
+  setExpenseData(expensedata.filter((item) => item.id !== id));
   const updatedBudgets = budgetdata.map((b) => {
-      if (b.bn === budgetname) {
+      if (b.id === bid) {
         // Return a completely new object copy with safe math overrides
         return {
           ...b,

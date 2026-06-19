@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Budgets.css";
+import "../css/Budgets.css";
 function Budgets(props) {
   const [addBudget, setAddBudget] = useState(false);
   const [initial, setInitial] = useState(true);
@@ -9,6 +9,7 @@ function Budgets(props) {
     e.preventDefault();
     const f = e.target;
     const d = {
+      id:Date.now(),
       bn: f.budgetName.value,
       duration:
         (new Date(f.to.value) - new Date(f.from.value)) /
@@ -20,8 +21,12 @@ function Budgets(props) {
       spent:0,
       remaining:Number(f.amount.value),
     };
+    const budn={
+      id:d.id,
+      bn:d.bn
+    }
     props.setBudgetData([...props.budgetdata, d]);
-    props.setBudgetNames([...props.budgetnames, d.bn]);
+    props.setBudgetNames([...props.budgetnames, budn]);
     f.reset();
   }
   return (
@@ -167,7 +172,7 @@ function Display(props) {
   }
   const d = props.budgetdata.map((b) => {
     return (
-      <tr key={b.bn}>
+      <tr key={b.id}>
         <td>{b.bn}</td>
         <td>{b.duration} days</td>
         <td>{b.to}</td>
@@ -193,6 +198,7 @@ function Display(props) {
                 props.budgetdata,
                 props.setBudgetData,
                 b.bn,
+                b.id,
                 props.budgetnames,
                 props.setBudgetNames,
                 props.expensedata,
@@ -209,6 +215,7 @@ function Display(props) {
   } else {
     return (
       <EditBudget
+      budgetid={editbudget.id}
         budgetnames={props.budgetnames}
         setBudgetNames={props.setBudgetNames}
         editbudget={editbudget}
@@ -236,6 +243,7 @@ function EditBudget(props) {
     e.preventDefault();
     const f = e.target;
     const newb = {
+      id:props.budgetid,
       bn: f.editbudgetname.value,
       duration: f.editduration.value,
       to: f.editto.value,
@@ -243,15 +251,19 @@ function EditBudget(props) {
       amount: f.editamt.value,
     };
     const newbud = props.budgetdata.map((b) => {
-      if (b.bn == props.budgetnametobechanged) {
+      if (b.id == props.budgetid) {
         return newb;
       } else {
         return b;
       }
     });
+    const newn={
+      id:props.budgetid,
+      bn:newb.bn
+    }
     const newbudnames = props.budgetnames.map((b) => {
-      if (b == props.budgetnametobechanged) {
-        return newb.bn;
+      if (b.id == props.budgetid) {
+        return newn;
       } else {
         return b;
       }
@@ -321,14 +333,15 @@ function DeleteBudget(
   budgetdata,
   setBudgetData,
   name,
+  id,
   budgetnames,
   setBudgetNames,
   expensedata,
   setExpenseData,
 ) {
-  setBudgetData(budgetdata.filter((i) => i.bn !== name));
-  setBudgetNames(budgetnames.filter((i) => i != name));
-  setExpenseData(expensedata.filter((i)=>i.budgetname!=name));
+  setBudgetData(budgetdata.filter((i) => i.id !== id));
+  setBudgetNames(budgetnames.filter((i) => i.id != id));
+  setExpenseData(expensedata.filter((i)=>i.bid!=id));
 }
 function SetUp() {
   const m = new Date().getMonth();

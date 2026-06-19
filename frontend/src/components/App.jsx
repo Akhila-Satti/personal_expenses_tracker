@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./App.css";
+import "../css/App.css";
 import Budgets from './Budgets.jsx';
 import Expenses from "./Expenses.jsx";
 import Sidenav from "./Sidenav.jsx";

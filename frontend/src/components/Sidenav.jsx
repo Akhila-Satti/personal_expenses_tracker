@@ -1,4 +1,4 @@
-import "./Sidenav.css";
+import "../css/Sidenav.css";
 import { useState } from "react";
 
 function Sidenav(props) {
