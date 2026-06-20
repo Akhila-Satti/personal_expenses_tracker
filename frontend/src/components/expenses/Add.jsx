@@ -1,34 +1,27 @@
+import axios from "axios";
 function AddExpense(props) {
   function NewExpense(e) {
-    
     e.preventDefault();
     const f = e.target;
-    const resnum=props.budgetnames.filter((i)=>i.id==f.budgetname.value)
+    const resnum = props.budgetnames.filter((i) => i.id == f.budgetname.value);
     const d = {
-      id:Date.now(),
-      bid:resnum[0].id,
+      id: Date.now(),
+      bid: resnum[0].id,
       name: f.ExpenseName.value,
       amount: Number(f.amount.value),
       date: f.date.value,
       budgetname: resnum[0].bn,
     };
-    
-    props.setExpenseData([...props.expensedata, d]);
+    axios
+      .post('http://localhost:5000/api/expenses/', d)
+      .catch((err) => {
+        console.log(err)});
+
     f.reset();
-    
+
     alert("added succesfully!");
-    const updatedBudgets = props.budgetdata.map((b) => {
-      if (b.id === d.bid) {
-        // Return a completely new object copy with safe math overrides
-        return {
-          ...b,
-          spent: (b.spent || 0) + d.amount,
-          remaining: (b.remaining || b.amount) - d.amount,
-        };
-      }
-      return b; // Return un-targeted elements as they were
-    });
-    props.setBudgetData(updatedBudgets);
+    
+   
   }
 
   return (

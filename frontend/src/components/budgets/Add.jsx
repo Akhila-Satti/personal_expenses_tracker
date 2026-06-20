@@ -1,6 +1,9 @@
+import axios from 'axios';
 function AddBudget(props) {
+  
   function NewBudget(e) {
     e.preventDefault();
+
     const f = e.target;
     const d = {
       id:Date.now(),
@@ -15,12 +18,14 @@ function AddBudget(props) {
       spent:0,
       remaining:Number(f.amount.value),
     };
-    const budn={
-      id:d.id,
-      bn:d.bn
-    }
-    props.setBudgetData([...props.budgetdata, d]);
-    props.setBudgetNames([...props.budgetnames, budn]);
+    
+    axios.post('http://localhost:5000/api/budgets/',d).then(res=>{
+      
+        props.setBudgetNames(res.data);
+      }).catch(err=>{
+        console.log(err)
+      })
+    
     f.reset();
   }
   return (

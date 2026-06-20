@@ -6,8 +6,6 @@ function Budgets(props) {
   const [addBudget, setAddBudget] = useState(false);
   const [initial, setInitial] = useState(true);
   const [displayBudget, setDisplayBudget] = useState(false);
-
-  
   return (
     <>
       <div id="budgetspanel">

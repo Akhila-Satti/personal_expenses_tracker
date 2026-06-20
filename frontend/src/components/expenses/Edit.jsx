@@ -1,5 +1,6 @@
+import axios from "axios";
 function EditExpenses(props) {
-  console.log("edited");
+  
   function ChangeExpense(e) {
     e.preventDefault();
     const f = e.target;
@@ -13,46 +14,14 @@ function EditExpenses(props) {
       date: f.date.value,
       budgetname: resnum[0].bn,
     };
-    const newData = props.expensedata.map((d) => {
-      if (d.id === props.id) {
-        return newd;
-      } else {
-        return d;
-      }
-    });
-    const updatedBudgets = props.budgetdata.map((b) => {
-      if (newd.bid === props.bid) {
-        if (b.id === newd.bid) {
-          return {
-            ...b,
-            spent: (b.spent || 0) + newd.amount - props.expenseamount,
-            remaining:
-              (b.remaining || b.amount) - newd.amount + props.expenseamount,
-          };
-        }
-      }
-      if (newd.bid !== props.bid) {
-        if (b.id === newd.bid) {
-          return {
-            ...b,
-            spent: (b.spent || 0) + newd.amount,
-            remaining: (b.remaining || b.amount) - newd.amount,
-          };
-        }
-        if (b.id === props.bid) {
-          return {
-            ...b,
-            spent: (b.spent || 0) - props.expenseamount,
-            remaining: (b.remaining || b.amount) +props.expenseamount,
-          };
-        }
-      }
-      return b; // Return un-targeted elements as they were
-    });
+    
+    axios.put(`http://localhost:5000/api/expenses/${newd.id}`,{newd:newd,oldbid:props.bid,expenseamount:props.expenseamount})
+      
+    .catch(err=>console.log(err))
+   
 
-    props.setBudgetData(updatedBudgets);
-    props.setExpenseData(newData);
-    props.setEditExpense(null);
+   
+   
   }
   return (
     <>

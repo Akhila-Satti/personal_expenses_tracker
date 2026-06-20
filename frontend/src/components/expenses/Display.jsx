@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import EditExpenses from './Edit';
 import DeleteExpense from './Delete';
+import axios from "axios";
 function DisplayExpense(props) {
   return (
     <table>
@@ -27,6 +28,13 @@ function DisplayExpense(props) {
 }
 function Display(props) {
   const [editExpense, setEditExpense] = useState(null);
+  useEffect(()=>{
+     axios.get('http://localhost:5000/api/expenses/').then(res=>{
+    
+    props.setExpenseData(res.data);
+  }).catch(err=>console.log(err));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   if (props.expensedata.length === 0) {
     return (
       <tr>
@@ -34,6 +42,7 @@ function Display(props) {
       </tr>
     );
   }
+  
   const d = props.expensedata.map((b) => {
     return (
       <tr key={b.id}>

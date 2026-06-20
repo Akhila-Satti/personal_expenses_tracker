@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DeleteBudget from "./Delete";
+import axios from "axios";
 import EditBudget from "./Edit";
 function DisplayBudget(props) {
   return (
@@ -11,12 +12,8 @@ function DisplayBudget(props) {
           <th>To</th>
           <th>From</th>
           <th>Amount</th>
-           <th>
-                Spent
-              </th>
-              <th>
-                Remaining
-              </th>
+          <th>Spent</th>
+          <th>Remaining</th>
         </tr>
       </thead>
       <tbody>
@@ -34,6 +31,15 @@ function DisplayBudget(props) {
 }
 function Display(props) {
   const [editbudget, setEditBudget] = useState(null);
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/budgets/")
+      .then((res) => {
+        props.setBudgetData(res.data);
+      })
+      .catch((err) => console.log(err));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   if (props.budgetdata.length === 0) {
     return (
       <tr colSpan="7">
@@ -41,6 +47,7 @@ function Display(props) {
       </tr>
     );
   }
+
   const d = props.budgetdata.map((b) => {
     return (
       <tr key={b.id}>
@@ -91,6 +98,7 @@ function Display(props) {
         budgetnames={props.budgetnames}
         setBudgetNames={props.setBudgetNames}
         editbudget={editbudget}
+        setEditBudget={setEditBudget}
         budgetdata={props.budgetdata}
         setBudgetData={props.setBudgetData}
         budgetnametobechanged={editbudget.bn}

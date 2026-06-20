@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 function EditBudget(props) {
   const [editName, setEditName] = useState(props.editbudget.bn);
   const [fromDate, setFromDate] = useState(props.editbudget.from);
@@ -16,35 +17,25 @@ function EditBudget(props) {
     e.preventDefault();
     const f = e.target;
     const newb = {
-      id:props.budgetid,
+      id: props.budgetid,
       bn: f.editbudgetname.value,
       duration: f.editduration.value,
       to: f.editto.value,
       from: f.editfrom.value,
-      amount:Number( f.editamt.value),
+      amount: Number(f.editamt.value),
       spent: props.spent,
-      remaining:Number(f.editamt.value)-props.spent
+      remaining: Number(f.editamt.value) - props.spent,
     };
-    const newbud = props.budgetdata.map((b) => {
-      if (b.id == props.budgetid) {
-        return newb;
-      } else {
-        return b;
-      }
-    });
-    const newn={
-      id:props.budgetid,
-      bn:newb.bn
-    }
-    const newbudnames = props.budgetnames.map((b) => {
-      if (b.id == props.budgetid) {
-        return newn;
-      } else {
-        return b;
-      }
-    });
-    props.setBudgetData(newbud);
-    props.setBudgetNames(newbudnames);
+   
+    axios
+      .put(`http://localhost:5000/api/budgets/${newb.id}`, newb)
+      .then((res) => {
+         props.setBudgetNames(res.data);
+        })
+      .catch((err) => console.log(err));
+    
+    
+    
     alert("edited");
   }
   return (
@@ -70,16 +61,6 @@ function EditBudget(props) {
           ></input>
           <input
             type="date"
-            id="editto"
-            name="editto"
-            value={toDate}
-            onChange={(e) => {
-              e.preventDefault();
-              setToDate(e.target.value);
-            }}
-          ></input>
-          <input
-            type="date"
             id="editfrom"
             name="editfrom"
             value={fromDate}
@@ -88,6 +69,17 @@ function EditBudget(props) {
               setFromDate(e.target.value);
             }}
           ></input>
+          <input
+            type="date"
+            id="editto"
+            name="editto"
+            value={toDate}
+            onChange={(e) => {
+              e.preventDefault();
+              setToDate(e.target.value);
+            }}
+          ></input>
+          
           <input
             type="number"
             id="editamt"
