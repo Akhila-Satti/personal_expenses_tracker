@@ -1,21 +1,35 @@
-let data= require("../../data");
-const deleteexpenses=(req, res) => {
- 
-  const deletedata = data.expenses.find((i) => i.id === Number(req.params.deleteId));
+const Expense=require('../../models/Expense');
+const Budget=require('../../models/Budget');
+const mongoose = require("mongoose");
+const deleteexpenses=async (req, res) => {
   
-   data.expenses = data.expenses.filter((i) => i.id !== Number(req.params.deleteId));
-  data.budgets = data.budgets.map((b) => {
-    if (b.id === deletedata.bid) {
-      // Return a completely new object copy with safe math overrides
-      return {
-        ...b,
-        spent: (b.spent || 0) - deletedata.amount,
-        remaining: (b.remaining || b.amount) + deletedata.amount,
-      };
-    }
-    return b; // Return un-targeted elements as they were
+
+if (!mongoose.Types.ObjectId.isValid(req.params.budgetId)) {
+    return res.status(400).send("Invalid Budget ID");
+}
+if (!mongoose.Types.ObjectId.isValid(req.params.deleteId)) {
+    return res.status(400).send("Invalid Expense ID");
+}
+ const relatedBudget=await Budget.findById(req.params.budgetId);
+
+ if(!relatedBudget){
+  return res.status(404).send("No such budget exist");
+ }
+  const deleteexpense=await Expense.findById(req.params.deleteId);
+ 
+  if(!deleteexpense){
+    return res.status(404).send("No data to delete");
+  }
+  if (deleteexpense.budgetId.toString() !== req.params.budgetId) {
+    return res.status(404).send("Expense doesn't belong to this budget");
+}
+  if(req.id!==deleteexpense.userId.toString()){
+    return res.status(403).send("Unauthorised");
+  }
+  await deleteexpense.deleteOne();
+  return res.status(200).json({
+    message:"deletedSuccesfully"
   });
-  res.status(200).json(data.expenses);
   
 }
 module.exports=deleteexpenses;
