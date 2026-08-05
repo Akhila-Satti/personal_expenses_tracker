@@ -18,7 +18,7 @@ app.use('/api',expenses)
 app.use('/api/signup',signup)
 app.use('/api/login',login)
 app.use('/api/dashboard',dashboard);
-const PORT=5000
+const PORT=process.env.PORT
 
 
 app.listen(PORT, () => {
