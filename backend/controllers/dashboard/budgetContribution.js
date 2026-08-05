@@ -5,7 +5,14 @@ const budgetContribution = async (req, res) => {
   
 
 const userId = new mongoose.Types.ObjectId(req.id);
-  formatter.format(new Date());
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Kolkata",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
+const today = formatter.format(new Date());
   const budgets = await Budgets.find({
     userId: userId,
     from: { $lte: today },
