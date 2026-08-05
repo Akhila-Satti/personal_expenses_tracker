@@ -1,16 +1,11 @@
 const Expenses = require("../../models/Expense");
 const Budgets = require("../../models/Budget");
 const mongoose = require("mongoose");
+const moment = require("moment-timezone");
 const budgetvsexpenses = async (req, res) => {
   const userId = new mongoose.Types.ObjectId(req.id);
-  const formatter = new Intl.DateTimeFormat("en-CA", {
-  timeZone: "Asia/Kolkata",
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-});
 
-const today = formatter.format(new Date());
+  const today = moment().tz("Asia/Kolkata").startOf("day").toDate();
 
   const expenses = await Budgets.aggregate([
     {
