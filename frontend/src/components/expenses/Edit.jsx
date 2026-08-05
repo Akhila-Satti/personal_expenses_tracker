@@ -47,7 +47,7 @@ function EditExpense() {
       await axios.patch(
         `${import.meta.env.VITE_API_URL}/api/expenses/${params.budgetId}/${params.expenseId}`,
         d,
-        authorization,
+        authorization(),
       );
 
       navigate("/expenses");
