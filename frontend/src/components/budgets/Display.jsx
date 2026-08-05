@@ -1,109 +1,67 @@
-import { useState, useEffect } from "react";
-import DeleteBudget from "./Delete";
 import axios from "axios";
-import EditBudget from "./Edit";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../../css/Budgets/DisplayBudgets.css";
+import authorization from "../../api/authHeaders";
 function DisplayBudget(props) {
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>Budget Name</th>
-          <th>Duration</th>
-          <th>To</th>
-          <th>From</th>
-          <th>Amount</th>
-          <th>Spent</th>
-          <th>Remaining</th>
-        </tr>
-      </thead>
-      <tbody>
-        <Display
-          budgetdata={props.budgetdata}
-          setBudgetData={props.setBudgetData}
-          budgetnames={props.budgetnames}
-          setBudgetNames={props.setBudgetNames}
-          expensedata={props.expensedata}
-          setExpenseData={props.setExpenseData}
-        />
-      </tbody>
-    </table>
-  );
-}
-function Display(props) {
-  const [editbudget, setEditBudget] = useState(null);
+  const navigate = useNavigate();
+  const [budgets, setBudgets] = useState([]);
+  const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/budgets/")
-      .then((res) => {
-        props.setBudgetData(res.data);
-      })
-      .catch((err) => console.log(err));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  if (props.budgetdata.length === 0) {
-    return (
-      <tr colSpan="7">
-        <td>No budgets added yet.</td>
-      </tr>
-    );
-  }
+    const fetchbudgets = async () => {
+      
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/budgets?search=${props.searchText}`,
+          authorization(),
+        );
+        if (response.data.length === 0) {
+          setErrorMessage("");
+          setBudgets([]);
+          return setMessage("No data to display");
+        }
+        setErrorMessage("");
+        setMessage("");
+        setBudgets(response.data);
+      } catch (err) {
+        if (err.response &&err.response.data) {
+          setBudgets([]);
+          setMessage("");
+          setErrorMessage(err.response.data.message);
+        } else {
+          setBudgets([]);
+          setMessage("");
+          setErrorMessage("Server error");
+        }
+      }
+    };
+    fetchbudgets();
+  }, [navigate, props.searchText]);
+  return (
+    <>
+      {errorMessage && errorMessage}
+      {message && message}
+      {budgets.map((d) => {
+        return (
+          <div className="displayCards" key={d._id}>
+            <h2>{d.bn}</h2>
+            <h4>From: {new Date(d.from).toLocaleDateString()}</h4>
+            <h4>To: {new Date(d.to).toLocaleDateString()}</h4>
+            <h4>Amount: Rs.{d.amount}</h4>
 
-  const d = props.budgetdata.map((b) => {
-    return (
-      <tr key={b.id}>
-        <td>{b.bn}</td>
-        <td>{b.duration} days</td>
-        <td>{b.to}</td>
-        <td>{b.from}</td>
-        <td>{b.amount}</td>
-        <td>{b.spent}</td>
-        <td>{b.remaining}</td>
-        <td>
-          <img
-            className="iconbtns"
-            src="./src/assets/edit.jpeg"
-            alt="edit"
-            onClick={() => setEditBudget(b)}
-          ></img>
-        </td>
-        <td>
-          <img
-            className="iconbtns"
-            src="./src/assets/delete.jpeg"
-            alt="delete"
-            onClick={() =>
-              DeleteBudget(
-                props.budgetdata,
-                props.setBudgetData,
-                b.bn,
-                b.id,
-                props.budgetnames,
-                props.setBudgetNames,
-                props.expensedata,
-                props.setExpenseData,
-              )
-            }
-          ></img>
-        </td>
-      </tr>
-    );
-  });
-  if (editbudget == null) {
-    return d;
-  } else {
-    return (
-      <EditBudget
-        spent={editbudget.spent}
-        budgetid={editbudget.id}
-        budgetnames={props.budgetnames}
-        setBudgetNames={props.setBudgetNames}
-        editbudget={editbudget}
-        setEditBudget={setEditBudget}
-        budgetdata={props.budgetdata}
-        setBudgetData={props.setBudgetData}
-        budgetnametobechanged={editbudget.bn}
-      />
-    );
-  }
+            <div className="card-actions">
+              <button>
+                <Link to={`/editbudget/${d._id}`}>Edit</Link>
+              </button>
+              <button>
+                <Link to={`/deletebudget/${d._id}`}>Delete</Link>
+              </button>
+            </div>
+          </div>
+        );
+      })}
+    </>
+  );
 }
 export default DisplayBudget;

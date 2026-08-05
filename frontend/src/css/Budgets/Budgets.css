@@ -1,0 +1,93 @@
+#budgets-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  padding: 30px 40px;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-primary, #f4f6f8);
+  min-height: 100%;
+}
+
+/* Top Bar Container */
+#filterandadd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background-color: var(--bg-card, #ffffff);
+  padding: 16px 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* Search Input */
+#filterandadd input[type="text"] {
+  flex: 1;
+  max-width: 380px;
+  padding: 10px 14px;
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-main, #1e293b);
+  background-color: var(--input-bg, #ffffff);
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#filterandadd input[type="text"]:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+/* Add Budget Action Button */
+#filterandadd button {
+  background-color: #4f46e5;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+#filterandadd button:hover {
+  background-color: #4338ca;
+}
+
+#filterandadd button:active {
+  transform: scale(0.98);
+}
+
+/* Display Items Container */
+#displayItems {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 📱 Responsive view */
+@media (max-width: 600px) {
+  #budgets-page {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  #filterandadd {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #filterandadd input[type="text"] {
+    max-width: 100%;
+  }
+
+  #filterandadd button {
+    width: 100%;
+  }
+}

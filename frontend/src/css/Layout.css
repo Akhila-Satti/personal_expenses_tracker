@@ -1,0 +1,216 @@
+/* ==========================================
+   PERMANENT LAYOUT (SIDEBAR + CONTENT)
+   ========================================== */
+
+/* Outer Flex Wrapper */
+#container {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-primary, #f4f6f8);
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 1. Desktop Left Sidebar */
+#sidenav {
+  width: 240px;
+  min-width: 240px;
+  height: 100vh;
+  background-color: #0f2942 !important;
+  color: #ffffff;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  z-index: 100;
+}
+
+#sidenav nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+  flex: 1;
+}
+
+/* Base Styles for Links & Buttons */
+#sidenav nav a,
+#changetheme,
+#logout {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 12px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  text-transform: capitalize;
+}
+
+#sidenav nav a:hover,
+#changetheme:hover,
+#logout:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Desktop positioning */
+#changetheme {
+  margin-top: auto;
+}
+
+#logout {
+  margin-top: 8px;
+}
+
+#logout img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+/* ==========================================
+   CUSTOM COMPACT THEME TOGGLE SWITCH
+   ========================================== */
+.theme-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  user-select: none;
+  cursor: pointer;
+}
+
+.theme-switch input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Reduced size slider track */
+.slider {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 20px;
+  background: #334155;
+  border-radius: 20px;
+  transition: 0.3s;
+}
+
+/* Slider thumb */
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: 3px;
+  bottom: 3px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+input:checked + .slider {
+  background: #4f46e5;
+}
+
+input:checked + .slider::before {
+  transform: translateX(18px);
+}
+
+/* 2. Main Right Content Area */
+#page-content {
+  flex: 1;
+  min-width: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary, #f4f6f8);
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* ==========================================
+   📱 MOBILE VIEW (< 768px): SIDENAV TO TOP
+   ========================================== */
+@media (max-width: 768px) {
+  #container {
+    flex-direction: column !important;
+    height: 100vh;
+  }
+
+  #sidenav {
+    width: 100% !important;
+    height: auto !important;
+    min-width: 100% !important;
+    padding: 10px 16px !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  #sidenav nav {
+    flex-direction: row !important;
+    margin-top: 0 !important;
+    gap: 6px;
+    align-items: center;
+    flex: initial;
+  }
+
+  #sidenav nav a {
+    padding: 8px 10px;
+    font-size: 14px;
+    width: auto;
+  }
+
+  /* Pushes Theme button to the far right corner & hides button text */
+  #changetheme {
+    margin-left: auto !important;
+    margin-top: 0 !important;
+    width: auto !important;
+    padding: 4px 6px !important;
+    font-size: 0 !important; /* Hides "change theme" text */
+    justify-content: center;
+    background: transparent !important;
+  }
+
+  /* Keeps slider label visible while hiding textual node */
+  #changetheme .theme-switch {
+    font-size: 10px; /* Reduces sun/moon emoji sizes */
+  }
+
+  #logout {
+    margin-top: 0 !important;
+    margin-left: 6px !important;
+    width: auto !important;
+    padding: 6px !important;
+    font-size: 0 !important; /* Hides "Logout" text */
+    justify-content: center;
+  }
+
+  #logout img {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+  }
+}

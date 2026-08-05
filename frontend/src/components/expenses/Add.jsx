@@ -1,88 +1,105 @@
-import axios from "axios";
-function AddExpense(props) {
-  function NewExpense(e) {
+
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState,useEffect } from 'react';
+import '../../css/Expenses/AddExpenses.css';
+import authorization from '../../api/authHeaders';
+function AddExpense() {
+  const [errorMessage,setErrorMessage]=useState("");
+  const[budgetNames,setBudgetNames]=useState([]);
+  const[loading,setLoading]=useState(true);
+   const navigate=useNavigate();
+useEffect(()=>{
+ 
+    const findBudgetNames=async()=>{
+      const response=await axios.get('http://localhost:5000/api/budgets',authorization());
+      setBudgetNames(response.data);
+      setLoading(false);
+    }
+    findBudgetNames();
+  },[navigate])
+ 
+
+  
+  const NewExpense=async (e)=> {
     e.preventDefault();
+
     const f = e.target;
-    const resnum = props.budgetnames.filter((i) => i.id == f.budgetname.value);
+    const budgetId=f.budgetName.value;
+    const budgetName=budgetNames.find(b=>b._id===budgetId)
     const d = {
-      id: Date.now(),
-      bid: resnum[0].id,
-      name: f.ExpenseName.value,
-      amount: Number(f.amount.value),
-      date: f.date.value,
-      budgetname: resnum[0].bn,
+      budgetName:budgetName.bn,
+      expensename:f.expenseName.value,
+      spentOn:f.spentOn.value,
+      amount:f.amount.value,
     };
-    axios
-      .post('http://localhost:5000/api/expenses/', d)
-      .catch((err) => {
-        console.log(err)});
-
-    f.reset();
-
-    alert("added succesfully!");
     
-   
+    try{
+      
+  
+      setErrorMessage("")
+    await axios.post(`http://localhost:5000/api/expenses/${budgetId}`,d,authorization());
+    
+    navigate('/expenses');
   }
-
+    catch(err){
+      if(err.response && err.response.data){
+      setErrorMessage(err.response.data.message);}
+      else{
+        setErrorMessage("Server Error");
+      }
+      
+    }
+  }
+  if(loading){
+    return(
+      <div className='addexpenses'>
+      <nav>
+        <Link to='/expenses'>Back to Expenses</Link>
+      </nav>
+      <h4>Loading</h4>
+      </div>
+    )
+  }
+ else if( budgetNames.length===0){
+    return(
+       <div className='addexpenses'>
+      <nav>
+        <Link to='/expenses'>Back to Expenses</Link>
+      </nav>
+      <h3>No budgets to add Expenses</h3>
+      </div>
+    )
+  }
   return (
-    <form onSubmit={NewExpense} id="addingexpense">
-      <table>
-        <thead>
-          <tr>
-            <th>
-              <label htmlFor="ExpenseName">Expense Name</label>
-            </th>
-            <th>
-              <label htmlFor="amount">Amount</label>
-            </th>
-            <th>
-              <label htmlFor="date">Date</label>
-            </th>
-            <th>
-              <label htmlFor="budgetname">BudgetName</label>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <input
-                type="text"
-                id="ExpenseName"
-                name="ExpenseName"
-                required
-              ></input>
-            </td>
-            <td>
-              <input type="number" id="amount" name="amount" required></input>
-            </td>
-            <td>
-              <input
-                type="date"
-                id="date"
-                name="date"
-                defaultValue={new Date().toISOString().split("T")[0]}
-              ></input>
-            </td>
-            <td>
-              <select id="budgetname" name="budgetname" required>
-                <option value="">select a budget</option>
-                {props.budgetnames.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.bn}
-                  </option>
-                ))}
-              </select>
-            </td>
-            <td>
-              <button className="expensesbtn" type="submit">
-                Add the expense
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </form>
+
+    
+    <div className='addexpenses'>
+      <nav>
+        <Link to='/expenses'>Back to Expenses</Link>
+      </nav>
+      <form onSubmit={NewExpense} id="expenseadd">
+        <label htmlFor='budgetName'>BudgetName</label>
+      
+        <select id='budgetName' name="budgetName" required>
+        { budgetNames && budgetNames.map((d)=>{
+          return(
+            <option key={d._id} value={d._id}>{d.bn}</option>
+          )
+        })}
+        </select>
+
+         <label htmlFor='expenseName'>Expense Name</label>
+        <input type='text' name="expenseName" id="expenseName" required ></input>
+        <label htmlFor='spentOn'>Spent On</label>
+        <input type='date' name="spentOn" id="spentOn" required ></input>
+        
+        <label htmlFor='amount'>Amount</label>
+        <input type='number' name="amount" id="amount"required></input>
+        {errorMessage && errorMessage}
+        <button type="submit">Add Expense</button>
+      </form>
+    </div>
   );
 }
 export default AddExpense;

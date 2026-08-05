@@ -4,7 +4,7 @@ const mongoose=require("mongoose")
 const editbudgets = async (req, res) => {
   
   if (!mongoose.Types.ObjectId.isValid(req.params.updateId)) {
-      return res.status(400).send("Invalid Budget ID");
+      return res.status(400).json({message:"Invalid Budget ID"});
   }
   const updateData = req.body;
   if (Object.keys(req.body).length === 0) {
@@ -27,23 +27,33 @@ const editbudgets = async (req, res) => {
   const expenses=await Expense.find({
     budgetId:req.params.updateId,
   })
-  
+  let fromdata=null;
+  if(updateData.from){
+    fromdata=new Date(updateData.from);
+    fromdata.setHours(0,0,0,0);
+  }
+  let todata=null;
+  if(updateData.to){
+    todata=new Date(updateData.to);
+    todata.setHours(23,59,59,999);
+  }
   const updation = {
     bn: (updateData.bn ?? data.bn).trim().toLowerCase(),
-    from: updateData.from ?? data.from,
-    to:updateData.to ?? data.to,
+    from: (fromdata??data.from),
+    to: todata ?? data.to,
     amount: updateData.amount ?? data.amount,
   };
+  
 
   if (!updation.amount || updation.amount <= 0 ) {
-    return res.status(400).send("Amount should be positive");
+    return res.status(400).json({message:"Amount should be positive"});
   }
   if (!updation.from || !updation.to) {
-    return res.status(400).send("Both dates are required");
+    return res.status(400).json({message:"Both dates are required"});
   }
 
   if (new Date(updation.to) <= new Date(updation.from)) {
-    return res.status(400).send("To date should be after from date");
+    return res.status(400).json({message:"To date should be after from date"});
   }
   const alreadyData = await Budget.find({
     userId: req.id,
@@ -58,19 +68,19 @@ const editbudgets = async (req, res) => {
     const newTo = new Date(updation.to);
 
     if (existingFrom <= newTo && existingTo >= newFrom) {
-      return res.status(400).send("Already budget exists for the given period");
+      return res.status(400).json({message:"Already budget exists for the given period"});
     }
   }
   let spent=0;
   for(const d of expenses){
     if(new Date(d.spentOn)>new Date(updation.to)|| new Date(d.spentOn)<new Date(updation.from)){
-      return res.status(400).send("the budget timeline is bypassing the expenses sepnt dates");
+      return res.status(400).json({message:"the budget timeline is bypassing the expenses spent dates"});
     }
     spent=spent+d.amount;
   }
 
   if(updation.amount<spent){
-    return res.status(400).send("the amount allocated is less than the spent amount");
+    return res.status(400).json({message:"the amount allocated is less than the spent amount"});
   }
   await data.updateOne(updation);
 

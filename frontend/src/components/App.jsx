@@ -1,70 +1,38 @@
-import { useState } from "react";
-import "../css/App.css";
-import Budgets from './budgets/Budgets.jsx';
-import Expenses from "./expenses/Expenses.jsx";
-import Sidenav from "./Sidenav.jsx";
-import Login from "./authentication/login.jsx";
+import Login from "./authentication/Login.jsx";
 import Signup from "./authentication/Signup.jsx";
+import { Routes, Route } from "react-router-dom";
+import Dashboard from "../components/dashboard/Dashboard.jsx"
+import Budgets from "./budgets/Budgets.jsx";
+import Layout from "./Layout.jsx";
+import AddBudget from "./budgets/Add.jsx";
+import EditBudget from "./budgets/Edit.jsx";
+import DeleteBudget from "./budgets/Delete.jsx";
+import Expenses from "./expenses/Expenses.jsx";
+import AddExpense from "./expenses/Add.jsx";
+import EditExpense from "./expenses/Edit.jsx";
+import DeleteExpense from "./expenses/Delete.jsx"
+import ProtectedRoute from "./ProtectedRoute.jsx";
 function App() {
-  const [budgetdata, setBudgetData] = useState([]);
-  const[page ,setPage]=useState("default");
-  const[login,setLogin]=useState(false);
-  const[signup,setSignUp]=useState(true);
-  const[budgetnames,setBudgetNames]=useState([]);
-  const [expensedata, setExpenseData] = useState([]);
   return (
-    <>
-    {!login && <Login setLogin={setLogin} setSignUp={setSignUp}/>}
-    {!signup && <Signup setLogin={setLogin} setSignUp={setSignUp}/>}
-   {(login && signup) && <Actual page={page} setPage={setPage } budgetnames={budgetnames} setBudgetNames={setBudgetNames} budgetdata={budgetdata} setBudgetData={setBudgetData} expensedata={expensedata} setExpenseData={setExpenseData}/>} 
+    <Routes>
+      <Route path="/" element={<Login />}></Route>
+      <Route path="/signup" element={<Signup />}></Route>
+      <Route element={<ProtectedRoute />}>
+      <Route element={<Layout />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/budgets" element={<Budgets />} />
+        <Route path="/addbudget" element={<AddBudget />} />
+        <Route path="/editbudget/:updateId" element={<EditBudget />} />
+        <Route path="/expenses" element={<Expenses />} />
+        <Route path="/addexpense" element={<AddExpense />} />
+        <Route path="/editexpense/:budgetId/:expenseId" element={<EditExpense />}/>
 
-    </>
+        <Route path="/deletebudget/:deleteId" element={<DeleteBudget />}></Route>
+      <Route path="/deleteexpense/:budgetId/:deleteId" element={<DeleteExpense />}></Route>
+      </Route>
+      </Route>
+    </Routes>
   );
 }
-function Default(){
-  return(
-    <div id="about">
-        <h2 id="heading">About us</h2>
-        <p>Getting troubled in maintaining expenses?</p>
-        <p>Don't worry! Let it be solved with our personal expenses tracker.</p>
-        <p> Enter your budget and expenditure and get it solved.😉</p>
-      </div>
-  )
-}
-function Actual(props){
-  return(
-    <>
-     <div>
-        <h1 id="title">Personal Expenses Tracker-Made with &hearts;</h1>
-      </div>
-      <header>
-        <nav id="headerbar">
-          <Sidenav setPage={props.setPage}/>
-          <a href="#about" onClick={()=>{
-            props.setPage("default")
-          }}>About us</a>
-          <a href="#Budgets" onClick={()=>{
-            props.setPage("budgets")
-          }}>Budget</a>
-          <a href="#expenses" onClick={()=>{
-            props.setPage("expenses")
-          }}>Expenses</a>
-        </nav>
-      </header>
-      <main id="main">
-       
-        {(props.page=="default" ) && <Default />}
-      {(props.page==="budgets" ) && <Budgets budgetnames={props.budgetnames} setBudgetNames={props.setBudgetNames} budgetdata={props.budgetdata} setBudgetData={props.setBudgetData} expensedata={props.expensedata} setExpenseData={props.setExpenseData}/>}
-     {(props.page==="expenses" ) && <Expenses budgetnames={props.budgetnames} setBudgetNames={props.setBudgetNames} expensedata={props.expensedata} setExpenseData={props.setExpenseData} budgetdata={props.budgetdata} setBudgetData={props.setBudgetData}/>}
-      </main>
-      
-      <footer>
-        <p>Made by Akhila(❁´◡`❁)</p>
-      </footer>
-    </>
-   
-  )
-}
-
 
 export default App;

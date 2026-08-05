@@ -1,0 +1,115 @@
+/* Card Container Grid Layout */
+#displayItems {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Individual Budget Card */
+.displayCards {
+  background-color: var(--bg-card, #ffffff);
+  border-radius: 14px;
+  padding: 24px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+/* Hover Effect: Soft lift + glow border */
+.displayCards:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px -4px rgba(79, 70, 229, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-color: #c7d2fe;
+}
+
+/* Budget Title */
+.displayCards h2 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-main, #0f172a);
+  text-transform: capitalize;
+}
+
+/* Date Range and Amount Labels */
+.displayCards h4 {
+  margin: 2px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted, #64748b);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Amount Highlight Row */
+.displayCards h4:last-of-type {
+  font-size: 16px;
+  font-weight: 700;
+  color: #4f46e5;
+  margin-top: 6px;
+}
+
+/* Card Actions Container */
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color, #f1f5f9);
+}
+
+.card-actions button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.card-actions button a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Edit Link */
+.card-actions button a[href*="edit"] {
+  background-color: #eef2ff;
+  color: #4f46e5;
+}
+
+.card-actions button a[href*="edit"]:hover {
+  background-color: #4f46e5;
+  color: #ffffff;
+}
+
+/* Delete Link */
+.card-actions button a[href*="delete"] {
+  background-color: #fef2f2;
+  color: #ef4444;
+}
+
+.card-actions button a[href*="delete"]:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+/* 📱 Responsive View */
+@media (max-width: 600px) {
+  #displayItems {
+    grid-template-columns: 1fr;
+  }
+}

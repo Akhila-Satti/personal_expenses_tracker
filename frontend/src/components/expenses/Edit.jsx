@@ -1,65 +1,100 @@
 import axios from "axios";
-function EditExpenses(props) {
-  
-  function ChangeExpense(e) {
-    e.preventDefault();
-    const f = e.target;
-    let resnum = props.budgetnames.filter((i) => i.id == f.budgetname.value);
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import "../../css/Expenses/EditExpense.css";
+import authorization from "../../api/authHeaders";
+function EditExpense() {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [expenseName, setExpenseName] = useState("");
+  const [spentOn, setSpentOn] = useState("");
+  const [amount, setAmount] = useState("");
+  const params = useParams();
+  const navigate = useNavigate();
 
-    const newd = {
-      id: props.id,
-      bid: resnum[0].id,
-      name: f.expensename.value,
-      amount: Number(f.amt.value),
-      date: f.date.value,
-      budgetname: resnum[0].bn,
+  useEffect(() => {
+   
+    const prevdata = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/expenses/${params.expenseId}`,
+          authorization(),
+        );
+       
+        setExpenseName(response.data.expensename);
+        setSpentOn(response.data.spentOn.split("T")[0]);
+
+        setAmount(response.data.amount);
+      } catch {
+        setErrorMessage("Server Error");
+      }
     };
-    
-    axios.put(`http://localhost:5000/api/expenses/${newd.id}`,{newd:newd,oldbid:props.bid,expenseamount:props.expenseamount})
+    prevdata();
+  }, [navigate, params.expenseId]);
+  
+
+  const NewExpense = async (e) => {
+    e.preventDefault();
+
+    const d = {
+      expensename: expenseName,
+      spentOn: spentOn,
+      amount: amount,
+    };
+
+    try {
       
-    .catch(err=>console.log(err))
-   
+      setErrorMessage("");
+      await axios.patch(
+        `http://localhost:5000/api/expenses/${params.budgetId}/${params.expenseId}`,
+        d,
+        authorization,
+      );
 
-   
-   
-  }
+      navigate("/expenses");
+    } catch (err) {
+      if (err.response && err.response.data) {
+        setErrorMessage(err.response.data.message);
+      } else {
+        setErrorMessage("Server Error");
+      }
+    }
+  };
+
   return (
-    <>
-      <tr>
-        <td colSpan="4">
-          <form onSubmit={ChangeExpense}>
-            <input
-              type="text"
-              placeholder="Enter expense name"
-              name="expensename"
-            ></input>
+    <div className="editexpenses">
+      <nav>
+        <Link to="/expenses">Back to Expenses</Link>
+      </nav>
+      <form onSubmit={NewExpense} id="expenseedit">
+        <label htmlFor="expenseName">Expense Name</label>
+        <input
+          type="text"
+          name="expenseName"
+          id="expenseName"
+          value={expenseName}
+          onChange={(e) => setExpenseName(e.target.value)}
+        ></input>
+        <label htmlFor="spentOn">Spent On</label>
+        <input
+          type="date"
+          name="spentOn"
+          id="spentOn"
+          value={spentOn}
+          onChange={(e) => setSpentOn(e.target.value)}
+        ></input>
 
-            <input
-              type="Number"
-              placeholder="enter expense amount"
-              name="amt"
-            ></input>
-
-            <input
-              type="date"
-              name="date"
-              defaultValue={new Date().toISOString().split("T")[0]}
-            ></input>
-
-            <select name="budgetname">
-              <option value="">select the value</option>
-              {props.budgetnames.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.bn}
-                </option>
-              ))}
-            </select>
-
-            <button type="submit">Submit</button>
-          </form>
-        </td>
-      </tr>
-    </>
+        <label htmlFor="amount">Amount</label>
+        <input
+          type="number"
+          name="amount"
+          id="amount"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        ></input>
+        {errorMessage && errorMessage}
+        <button type="submit">Update Expense</button>
+      </form>
+    </div>
   );
 }
-export default EditExpenses;
+export default EditExpense;

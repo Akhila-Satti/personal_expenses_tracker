@@ -1,99 +1,96 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-function EditBudget(props) {
-  const [editName, setEditName] = useState(props.editbudget.bn);
-  const [fromDate, setFromDate] = useState(props.editbudget.from);
-  const [toDate, setToDate] = useState(props.editbudget.to);
-  const [amount, setAmount] = useState(props.editbudget.amount);
+import { useNavigate,Link ,useParams} from "react-router-dom";
+import '../../css/Budgets/EditBudget.css'
+import authorization from "../../api/authHeaders";
+function EditBudget() {
+  const [errorMessage,setErrorMessage]=useState("");
+  const [budgetName,setBudgetName]=useState("");
+  const[fromdate,setFromdate]=useState("");
+  const[todate,setTodate]=useState("");
+  const[amount,setAmount]=useState("");
+  const navigate=useNavigate();
+  const params=useParams();
+  
+  useEffect(()=>{
+     
+    const prevdata=async ()=>{
+      try{
+      const response=await axios.get(`http://localhost:5000/api/budgets/${params.updateId}`,authorization());
+      setBudgetName(response.data.bn);
+setFromdate(response.data.from.split("T")[0]);
+setTodate(response.data.to.split("T")[0]);
+setAmount(response.data.amount);
+      }catch{
+        setErrorMessage("Server Error");
+      }
+    }
+    prevdata();
+  },[navigate, params.updateId])
 
-  // 2. Safely calculate duration completely in JavaScript memory
-  const start = new Date(fromDate);
-  const end = new Date(toDate);
-  const duration =
-    isNaN(start) || isNaN(end)
-      ? 0
-      : Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
-  function changeBudget(e) {
-    e.preventDefault();
-    const f = e.target;
-    const newb = {
-      id: props.budgetid,
-      bn: f.editbudgetname.value,
-      duration: f.editduration.value,
-      to: f.editto.value,
-      from: f.editfrom.value,
-      amount: Number(f.editamt.value),
-      spent: props.spent,
-      remaining: Number(f.editamt.value) - props.spent,
-    };
-   
-    axios
-      .put(`http://localhost:5000/api/budgets/${newb.id}`, newb)
-      .then((res) => {
-         props.setBudgetNames(res.data);
-        })
-      .catch((err) => console.log(err));
+  
+const editBudget= async(e)=>{
+  e.preventDefault();
+  
+
+  const d = {
+  bn: budgetName,
+  from: fromdate,
+  to: todate,
+  amount,
+};
+
+
     
+    try{
+      setErrorMessage("")
+    await axios.patch(`http://localhost:5000/api/budgets/${params.updateId}`,d,authorization());
     
-    
-    alert("edited");
+    navigate('/budgets');
   }
+    catch(err){
+      if(err.response && err.response.data){
+      setErrorMessage(err.response.data.message);}
+      else{
+        setErrorMessage("Server Error");
+      }
+      
+    }
+  
+
+  }
+
   return (
-    <tr>
-      <td colSpan="5">
-        <form onSubmit={changeBudget}>
-          <input
-            type="text"
-            value={editName}
-            onChange={(e) => {
-              e.preventDefault();
-              setEditName(e.target.value);
-            }}
-            id="editbudgetname"
-            name="editbudgetname"
-          ></input>
-          <input
-            type="number"
-            id="editduration"
-            name="editduration"
-            value={duration}
-            readOnly
-          ></input>
-          <input
-            type="date"
-            id="editfrom"
-            name="editfrom"
-            value={fromDate}
-            onChange={(e) => {
-              e.preventDefault();
-              setFromDate(e.target.value);
-            }}
-          ></input>
-          <input
-            type="date"
-            id="editto"
-            name="editto"
-            value={toDate}
-            onChange={(e) => {
-              e.preventDefault();
-              setToDate(e.target.value);
-            }}
-          ></input>
-          
-          <input
-            type="number"
-            id="editamt"
-            name="editamt"
-            value={amount}
-            onChange={(e) => {
-              e.preventDefault();
-              setAmount(e.target.value);
-            }}
-          ></input>
-          <button type="submit">Submit</button>
-        </form>
-      </td>
-    </tr>
+    <div id='editbudgets'>
+      <nav>
+        <Link to='/budgets'>Back to Budgets</Link>
+      </nav>
+      <form onSubmit={editBudget} id="budgetadd">
+        <label htmlFor='budgetName'>BudgetName</label>
+        <select id='budgetName' name='budgetName' value={budgetName}
+  onChange={(e) => setBudgetName(e.target.value)}>
+          <option value="">Select a budget category</option>
+          <option value='food'>Food</option>
+          <option value='clothing'>Clothing</option>
+          <option value='travel'>Travel</option>
+          <option value='entertainment'>Entertainment</option>
+          <option value='rents'>Rents</option>
+          <option value='loans'>Loans</option>
+          <option value='others'>Others</option>
+        </select>
+        <label htmlFor='fromdate' >From</label>
+        <input type='date' name="fromdate" id="fromdate" value={fromdate}
+  onChange={(e) => setFromdate(e.target.value)}></input>
+        <label htmlFor='todate' >To</label>
+        <input type='date' name="todate" id="todate" value={todate}
+  onChange={(e) => setTodate(e.target.value)}></input>
+        <label htmlFor='amount'>Amount</label>
+        <input type='number' name="amount" id="amount" value={amount}
+  onChange={(e) => setAmount(e.target.value)}></input>
+        {errorMessage && errorMessage}
+        <button type="submit">Edit budget</button>
+      </form>
+    </div>
   );
 }
 export default EditBudget;

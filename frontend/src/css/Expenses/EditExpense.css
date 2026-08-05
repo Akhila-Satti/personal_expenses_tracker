@@ -1,0 +1,110 @@
+.editexpenses {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-primary, #f4f6f8);
+  padding: 30px 40px;
+}
+
+.editexpenses nav {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.editexpenses nav a {
+  color: #4f46e5;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  transition: color 0.2s ease-in-out;
+}
+
+.editexpenses nav a:hover {
+  text-decoration: underline;
+  color: #3730a3;
+}
+
+.editexpenses #expenseedit {
+  width: 100%;
+  max-width: 480px;
+  margin: auto;
+  padding: 32px;
+  background-color: var(--bg-card, #ffffff);
+  border-radius: 12px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.editexpenses #expenseedit label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main, #334155);
+  margin-top: 2px;
+}
+
+.editexpenses #expenseedit input,
+.editexpenses #expenseedit select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-main, #1e293b);
+  background-color: var(--input-bg, #ffffff);
+  box-sizing: border-box;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.editexpenses #expenseedit input:focus,
+.editexpenses #expenseedit select:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.editexpenses #expenseedit button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  background-color: #4f46e5;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.editexpenses #expenseedit button[type="submit"]:hover {
+  background-color: #4338ca;
+}
+
+.editexpenses #expenseedit button[type="submit"]:active {
+  transform: scale(0.99);
+}
+
+@media (max-width: 600px) {
+  .editexpenses {
+    padding: 20px;
+  }
+
+  .editexpenses #expenseedit {
+    margin: 20px auto;
+    padding: 24px;
+  }
+}

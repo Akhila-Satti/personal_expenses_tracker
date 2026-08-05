@@ -1,0 +1,183 @@
+/* ==========================================
+   DASHBOARD MAIN PAGE CONTAINER
+   ========================================== */
+#dashboard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 30px 40px;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* 1. TOP HEADER BANNER */
+#dashboard header {
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+  padding: 24px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+  color: #ffffff;
+}
+
+#dashboard header h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+#dashboard header h5 {
+  margin: 8px 0 0 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #c7d2fe;
+  font-style: italic;
+}
+
+/* 2. MAIN GRID LAYOUT */
+#dashboard main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  width: 100%;
+}
+
+/* Base Card Styling for all sections */
+#dashboard #totalvalue,
+#dashboard #expenseByCategory,
+#dashboard #budgetvsexpenses,
+#dashboard #recentexpenses {
+  background-color: var(--bg-card, #ffffff);
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+/* Common Header style inside components */
+#dashboard main h1,
+#dashboard main h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main, #0f172a);
+  margin-bottom: 16px;
+}
+
+/* ==========================================
+   3. SECTION SPECIFIC STYLES
+   ========================================== */
+
+/* Top Row - Side-by-Side Cards */
+#dashboard #totalvalue {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#dashboard #totalvalue h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-muted, #475569);
+  margin: 8px 0;
+}
+
+#dashboard #totalvalue h4:last-of-type {
+  color: #ef4444; /* Highlight expense in red tone */
+}
+
+#dashboard #expenseByCategory {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Middle Row - Full Width Bar Chart */
+#dashboard #budgetvsexpenses {
+  grid-column: span 2;
+}
+
+/* Bottom Row - Full Width Table */
+#dashboard #recentexpenses {
+  grid-column: span 2;
+}
+
+/* ==========================================
+   4. BORDERLESS ZEBRA-STRIPED TABLE
+   ========================================== */
+#recentexpenses table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+#recentexpenses th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+  border-bottom: 2px solid var(--border-color, #f1f5f9);
+}
+
+#recentexpenses td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--text-main, #1e293b);
+  border: none; /* No borders between cells */
+}
+
+/* Zebra Striping: Alternating Row Backgrounds */
+#recentexpenses tbody tr:nth-child(even) {
+  background-color: var(--bg-primary, #f8fafc);
+}
+
+#recentexpenses tbody tr:nth-child(odd) {
+  background-color: var(--bg-card, #ffffff);
+}
+
+/* Hover Row Highlight */
+#recentexpenses tbody tr:hover {
+  background-color: rgba(79, 70, 229, 0.05);
+}
+/* Stats Cards inside TotalValue */
+#totalvalue h1 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+#totalvalue h4 {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-muted, #64748b);
+  padding: 10px 14px;
+  background-color: var(--bg-primary, #f8fafc);
+  border-radius: 8px;
+  margin: 6px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+#totalvalue h4:last-of-type {
+  color: #ef4444; /* Highlights total expense amount */
+  font-weight: 600;
+}
+/* ==========================================
+   5. MOBILE RESPONSIVE
+   ========================================== */
+@media (max-width: 900px) {
+  #dashboard {
+    padding: 20px;
+  }
+
+  #dashboard main {
+    grid-template-columns: 1fr; /* Stacks all sections into a single column */
+  }
+
+  #dashboard #budgetvsexpenses,
+  #dashboard #recentexpenses {
+    grid-column: span 1;
+  }
+}

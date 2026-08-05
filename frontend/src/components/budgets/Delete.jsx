@@ -1,28 +1,31 @@
 import axios from "axios";
-function DeleteBudget(
-  budgetdata,
-  setBudgetData,
-  name,
-  id,
-  budgetnames,
-  setBudgetNames,
-  expensedata,
-  setExpenseData,
-) {
-  axios
-    .delete(`http://localhost:5000/api/budgets/${id}`)
-    .then((res) => {
-      setBudgetNames(res.data);
-      axios.get("http://localhost:5000/api/budgets").then((res1) => {
-        setBudgetData(res1.data);
-      });
+import { useState,useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import authorization from "../../api/authHeaders";
+function DeleteBudget() {
+  const params = useParams();
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+  useEffect(() => {
+    const deleteBudget = async () => {
+      
+      try {
+        await axios.delete(
+          `http://localhost:5000/api/budgets/${params.deleteId}`,
+          authorization(),
+        );
+        navigate("/budgets");
+      } catch (err) {
+        if (err.response && err.response.data) {
+          setErrorMessage(err.response.data.message);
+        } else {
+          setErrorMessage("Server Error");
+        }
+      }
+    };
+    deleteBudget();
+  }, [navigate, params.deleteId]);
 
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  
-  setExpenseData(expensedata.filter((i) => i.bid != id));
+  return <>{errorMessage && errorMessage}</>;
 }
 export default DeleteBudget;

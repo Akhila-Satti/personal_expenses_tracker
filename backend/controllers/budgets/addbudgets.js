@@ -3,24 +3,30 @@ const addbudgets = async (req, res) => {
   const newD = req.body;
 
   if (Object.keys(req.body).length === 0) {
-    return res.status(400).send("No budget data received");
+    return res.status(400).json({
+      message:"No budget data received"});
   }
+  const from = new Date(newD.from);
+from.setHours(0, 0, 0, 0);
+
+const to = new Date(newD.to);
+to.setHours(23, 59, 59, 999);
   const budn = {
     userId: req.id,
     bn: newD.bn.trim().toLowerCase(),
-    from: newD.from,
-    to: newD.to,
+    from:from,
+    to:to,
     amount: newD.amount,
   };
   if (!budn.amount || budn.amount <= 0) {
-    return res.status(400).send("Amount should be positive");
+    return res.status(400).json({message:"Amount should be positive"});
   }
   if (!budn.from || !budn.to) {
-    return res.status(400).send("Both dates are required");
+    return res.status(400).json({message:"Both dates are required"});
   }
 
   if (new Date(budn.to) <= new Date(budn.from)) {
-    return res.status(400).send("To date should be after from date");
+    return res.status(400).json({message:"To date should be after from date"});
   }
   const alreadyData = await Budget.find({
     userId: req.id,
@@ -36,7 +42,7 @@ const addbudgets = async (req, res) => {
 
     if (existingFrom <= newTo && existingTo >= newFrom) {
         return res.status(400)
-            .send("Already budget exists for the given period");
+            .json({message:"Already budget exists for the given period"});
     }
 }
 

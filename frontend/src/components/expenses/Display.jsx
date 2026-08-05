@@ -1,93 +1,66 @@
-import { useState,useEffect } from "react";
-import EditExpenses from './Edit';
-import DeleteExpense from './Delete';
 import axios from "axios";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../../css/Expenses/DisplayExpenses.css";
+import authorization from "../../api/authHeaders";
 function DisplayExpense(props) {
+  const navigate = useNavigate();
+  const [expenses, setExpenses] = useState([]);
+  const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  useEffect(() => {
+    const fetchexpenses = async () => {
+      
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/expenses?searchBudget=${props.searchBudget}&searchExpense=${props.searchExpense}&spentDate=${props.spentDate}`,
+          authorization(),
+        );
+        if (response.data.length === 0) {
+          setErrorMessage("");
+          setExpenses([]);
+          return setMessage("No expense to display");
+        }
+        setErrorMessage("");
+        setMessage("");
+        setExpenses(response.data);
+      } catch (err) {
+        if (err.response &&err.response.data) {
+          setExpenses([]);
+          setMessage("");
+          setErrorMessage(err.response.data.message);
+        } else {
+          setExpenses([]);
+          setMessage("");
+          setErrorMessage("Server error");
+        }
+      }
+    };
+    fetchexpenses();
+  }, [navigate, props.searchBudget,props.searchExpense,props.spentDate]);
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Expense Name</th>
-          <th>Amount</th>
-          <th>Date</th>
-          <th>budget name</th>
-        </tr>
-      </thead>
-      <tbody>
-        <Display
-
-          expensedata={props.expensedata}
-          setExpenseData={props.setExpenseData}
-          budgetnames={props.budgetnames}
-          budgetdata={props.budgetdata}
-          setBudgetData={props.setBudgetData}
-        />
-      </tbody>
-    </table>
+    <>
+      {errorMessage && errorMessage}
+      {message && message}
+      {expenses.map((d) => {
+        return (
+          <div className="displayCards" key={d._id}>
+            <h2>{d.expensename}</h2>
+            <h3>{d.budgetName}</h3>
+            <h4>Spent on: {new Date(d.spentOn).toLocaleDateString()}</h4>
+            <h4>Amount: Rs.{d.amount}</h4>
+            <div className="card-actions">
+              <button>
+                <Link to={`/editexpense/${d.budgetId}/${d._id}`}>Edit</Link>
+              </button>
+              <button>
+                <Link to={`/deleteexpense/${d.budgetId}/${d._id}`}>Delete</Link>
+              </button>
+            </div>
+          </div>
+        );
+      })}
+    </>
   );
-}
-function Display(props) {
-  const [editExpense, setEditExpense] = useState(null);
-  useEffect(()=>{
-     axios.get('http://localhost:5000/api/expenses/').then(res=>{
-    
-    props.setExpenseData(res.data);
-  }).catch(err=>console.log(err));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
-  if (props.expensedata.length === 0) {
-    return (
-      <tr>
-        <td colSpan="4">No data</td>
-      </tr>
-    );
-  }
-  
-  const d = props.expensedata.map((b) => {
-    return (
-      <tr key={b.id}>
-        <td>{b.name}</td>
-        <td>{b.amount}</td>
-        <td>{b.date}</td>
-        <td>{b.budgetname}</td>
-        <td>
-          <img
-            className="iconbtns"
-            onClick={() => setEditExpense(b)}
-            src="./src/assets/edit.jpeg"
-            alt="edit expense"
-          ></img>
-        </td>
-        <td>
-          <img
-            className="iconbtns"
-            onClick={() =>
-              DeleteExpense(b.bid,b.id,props.expensedata, props.setExpenseData, b.name,b.budgetname,b.amount,props.budgetdata,props.setBudgetData)
-            }
-            src="./src/assets/delete.jpeg"
-            alt="delete expense"
-          ></img>
-        </td>
-      </tr>
-    );
-  });
-  if (editExpense == null) {
-    return d;
-  } else {
-    return (
-      <EditExpenses
-        bid={editExpense.bid}
-        id={editExpense.id}
-        expensedata={props.expensedata}
-        setExpenseData={props.setExpenseData}
-        expensenametobechanged={editExpense.name}
-        expenseamount={editExpense.amount}
-        setEditExpense={setEditExpense}
-        budgetnames={props.budgetnames}
-        budgetdata={props.budgetdata}
-        setBudgetData={props.setBudgetData}
-      />
-    );
-  }
 }
 export default DisplayExpense;

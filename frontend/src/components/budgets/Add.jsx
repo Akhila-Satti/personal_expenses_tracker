@@ -1,87 +1,64 @@
 import axios from 'axios';
-function AddBudget(props) {
-  
-  function NewBudget(e) {
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import '../../css/Budgets/AddBudget.css';
+import authorization from '../../api/authHeaders';
+function AddBudget() {
+  const [errorMessage,setErrorMessage]=useState("");
+  const navigate=useNavigate();
+  const NewBudget=async (e)=> {
     e.preventDefault();
 
     const f = e.target;
     const d = {
-      id:Date.now(),
-      bn: f.budgetName.value,
-      duration:
-        (new Date(f.to.value) - new Date(f.from.value)) /
-          (1000 * 60 * 60 * 24) +
-        1,
-      to: f.to.value,
-      from: f.from.value,
-      amount: Number(f.amount.value),
-      spent:0,
-      remaining:Number(f.amount.value),
+      bn:f.budgetName.value,
+      from:f.fromdate.value,
+      to:f.todate.value,
+      amount:f.amount.value,
+
     };
+    try{
+      setErrorMessage("")
+    await axios.post('http://localhost:5000/api/budgets/',d,authorization());
     
-    axios.post('http://localhost:5000/api/budgets/',d).then(res=>{
+    navigate('/budgets');
+  }
+    catch(err){
+      if(err.response && err.response.data){
+      setErrorMessage(err.response.data.message);}
+      else{
+        setErrorMessage("Server Error");
+      }
       
-        props.setBudgetNames(res.data);
-      }).catch(err=>{
-        console.log(err)
-      })
-    
-    f.reset();
+    }
   }
   return (
-    <>
-      <form onSubmit={NewBudget} id="budgetsadding">
-        <table>
-          <thead>
-            <tr>
-              <th rowSpan="2">
-                <label htmlFor="budgetName">BudgetName</label>
-              </th>
-
-              <th colSpan="2">
-                Duration<hr></hr>
-              </th>
-              <th rowSpan="2">
-                <label htmlFor="amount">Amount</label>
-              </th>
-            </tr>
-            <tr>
-              <th>
-                <label htmlFor="from">From</label>
-              </th>
-              <th>
-                <label htmlFor="to">To</label>
-              </th>
-             
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <input type="text" id="budgetName" name="budgetName" required />
-              </td>
-              <td>
-                <input type="date" id="from" name="from" required />
-              </td>
-              <td>
-                <input type="date" id="to" name="to" required />
-              </td>
-              <td>
-                <input type="number" id="amount" name="amount" required />
-              </td>
-              <td>
-                
-              </td>
-              <td>
-                <button className="budgetsbtn" type="submit">
-                  add this budget
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <div id='addbudgets'>
+      <nav>
+        <Link to='/budgets'>Back to Budgets</Link>
+      </nav>
+      <form onSubmit={NewBudget} id="budgetadd">
+        <label htmlFor='budgetName'>BudgetName</label>
+        <select id='budgetName' name='budgetName' required>
+          <option value="">Select a budget category</option>
+          <option value='food'>Food</option>
+          <option value='clothing'>Clothing</option>
+          <option value='travel'>Travel</option>
+          <option value='entertainment'>Entertainment</option>
+          <option value='rents'>Rents</option>
+          <option value='loans'>Loans</option>
+          <option value='others'>Others</option>
+        </select>
+        <label htmlFor='fromdate'>From</label>
+        <input type='date' name="fromdate" id="fromdate" required ></input>
+        <label htmlFor='todate'>To</label>
+        <input type='date' name="todate" id="todate" required></input>
+        <label htmlFor='amount'>Amount</label>
+        <input type='number' name="amount" id="amount"required></input>
+        {errorMessage && errorMessage}
+        <button type="submit">Add budget</button>
       </form>
-    </>
+    </div>
   );
 }
 export default AddBudget;

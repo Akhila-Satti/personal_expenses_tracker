@@ -1,62 +1,46 @@
 import { useState } from "react";
-import "../../css/Expenses.css";
-import AddExpense from './Add';
-import DisplayExpense from './Display';
-function Expenses(props) {
-  const [addExpense, setAddExpense] = useState(true);
-  const [display, setDisplay] = useState(false);
+import DisplayExpense from "./Display";
+import { useNavigate } from "react-router-dom";
+import "../../css/Expenses/Expenses.css"
+function Expenses() {
+  const [searchBudget, setSearchBudget] = useState("");
+  const [searchExpense, setSearchExpense] = useState("");
+  const [spentDate, setSpentDate] = useState("");
+  const navigate = useNavigate();
+  const addexpenses = () => {
+    navigate("/addexpense");
+  };
   return (
-    <>
-      <div id="expensespanel">
-        <div id="expensehandlers">
-          <button
-            className="expensesbtn"
-            onClick={() => {
-              setAddExpense(true);
-              setDisplay(false);
-            }}
-          >
-            Add Expense
-          </button>
+    <div id="expense-page">
+      <div id="filterandadd">
+        <select onChange={(e) => setSearchBudget(e.target.value)}>
+          <option value="">Select a budget category</option>
+          <option value="food">Food</option>
+          <option value="clothing">Clothing</option>
+          <option value="travel">Travel</option>
+          <option value="entertainment">Entertainment</option>
+          <option value="rents">Rents</option>
+          <option value="loans">Loans</option>
+          <option value="others">Others</option>
+        </select>
+        <input
+          type="text"
+          name="searchname"
+          placeholder="search for an expense.."
+          onChange={(e) => setSearchExpense(e.target.value)}
+        />
+        <input type="date" onChange={(e) => setSpentDate(e.target.value)} />
 
-          <button
-            className="expensesbtn"
-            onClick={() => {
-              setDisplay(true);
-              setAddExpense(false);
-            }}
-          >
-            Display Expense
-          </button>
-        </div>
-        <div id="res">
-          {addExpense && (
-            <AddExpense
-              expensedata={props.expensedata}
-              setExpenseData={props.setExpenseData}
-              budgetnames={props.budgetnames}
-              budgetdata={props.budgetdata}
-              setBudgetData={props.setBudgetData}
-            />
-          )}
-          {display && (
-            <DisplayExpense
-              expensedata={props.expensedata}
-              setExpenseData={props.setExpenseData}
-              budgetnames={props.budgetnames}
-              budgetdata={props.budgetdata}
-              setBudgetData={props.setBudgetData}
-            />
-          )}
-        </div>
+        <button onClick={addexpenses}>AddExpense</button>
       </div>
-    </>
+      <div id="displayItems">
+        <DisplayExpense
+          searchBudget={searchBudget}
+          searchExpense={searchExpense}
+          spentDate={spentDate}
+        />
+      </div>
+    </div>
   );
 }
-
-
-
-
-
-
 export default Expenses;
