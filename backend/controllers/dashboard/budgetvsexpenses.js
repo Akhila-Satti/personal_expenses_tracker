@@ -3,7 +3,10 @@ const Budgets = require("../../models/Budget");
 const mongoose = require("mongoose");
 const budgetvsexpenses = async (req, res) => {
   const userId = new mongoose.Types.ObjectId(req.id);
-  const today = new Date();
+  const today = new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Kolkata",
+});
+today.setHours(0,0,0,0)
 
   const expenses = await Budgets.aggregate([
     {
