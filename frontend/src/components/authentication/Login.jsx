@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import '../../css/authentication/Login.css'
-import startupImage from "../assets/startupimage.png";
+import startupImage from "../../assets/startupimage.png"
 
 function Login() {
   const navigate = useNavigate();
