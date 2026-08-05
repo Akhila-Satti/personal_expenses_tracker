@@ -35,7 +35,7 @@ const editbudgets = async (req, res) => {
   let todata=null;
   if(updateData.to){
     todata=new Date(updateData.to);
-    todata.setHours(23,59,59,999);
+    todata.setHours(0,0,0,0);
   }
   const updation = {
     bn: (updateData.bn ?? data.bn).trim().toLowerCase(),

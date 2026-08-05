@@ -44,9 +44,27 @@ new Date(d.spentOn).toISOString().split("T")[0]){
    if(expensedata.amount>(targetBudget.amount-spent)){
     return res.status(400).json({message:"Expense amount exceeding the allocated budget"});
    }
-   if(new Date(expensedata.spentOn)>new Date(targetBudget.to)||new Date(targetBudget.from)>new Date(expensedata.spentOn)||new Date(expensedata.spentOn)>Date.now()){
-    return res.status(400).json({message:"Date must be with in budget timeline and less than todays date"});
-   }
+   const expenseDate = new Date(expensedata.spentOn);
+expenseDate.setHours(0, 0, 0, 0);
+
+const fromDate = new Date(targetBudget.from);
+fromDate.setHours(0, 0, 0, 0);
+
+const toDate = new Date(targetBudget.to);
+toDate.setHours(0, 0, 0, 0);
+
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+if (
+    expenseDate > toDate ||
+    expenseDate < fromDate ||
+    expenseDate > today
+) {
+    return res.status(400).json({
+        message: "Date must be within the budget timeline and cannot be after today"
+    });
+}
    
 
   if(!expensedata.amount || expensedata.amount<=0){

@@ -10,7 +10,7 @@ const addbudgets = async (req, res) => {
 from.setHours(0, 0, 0, 0);
 
 const to = new Date(newD.to);
-to.setHours(23, 59, 59, 999);
+to.setHours(0, 0, 0, 0);
   const budn = {
     userId: req.id,
     bn: newD.bn.trim().toLowerCase(),

@@ -22,7 +22,7 @@ const displayAllexpenses = async (req, res) => {
     start.setHours(0, 0, 0, 0);
 
     const end = new Date(req.query.spentDate);
-    end.setHours(23, 59, 59, 999);
+    end.setHours(0, 0, 0, 0);
 
     filter.spentOn = {
       $gte: start,

@@ -41,9 +41,27 @@ if(prevExpense.budgetId.toString() !== req.params.budgetId){
     return res.status(400).json({message:"amount should be positive to add"});
   }
 
-  if(new Date(datatoupdate.spentOn)>new Date(targetBudget.to)||new Date(targetBudget.from)>new Date(datatoupdate.spentOn)||new Date(datatoupdate.spentOn)>Date.now()){
-    return res.status(400).json({message:"Date must be with in budget timeline and must be completed before this time"});
-   }
+  const expenseDate = new Date(datatoupdate.spentOn);
+expenseDate.setHours(0, 0, 0, 0);
+
+const budgetFrom = new Date(targetBudget.from);
+budgetFrom.setHours(0, 0, 0, 0);
+
+const budgetTo = new Date(targetBudget.to);
+budgetTo.setHours(0, 0, 0, 0);
+
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+if (
+    expenseDate < budgetFrom ||
+    expenseDate > budgetTo ||
+    expenseDate > today
+) {
+    return res.status(400).json({
+        message: "Date must be within the budget timeline and cannot be after today"
+    });
+}
   const expenses=await Expense.find({
     budgetId:req.params.budgetId
   })
