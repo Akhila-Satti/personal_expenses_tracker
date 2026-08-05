@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import '../../css/authentication/Login.css'
+import startupImage from "../assets/startupimage.png";
 
 function Login() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ function Login() {
     <div id="login">
       <div id="login_image">
         <img
-          src="./src/assets/startupimage.png"
+          src={startupImage}
           alt="Personal_Expenses_Tracker"
         ></img>
       </div>

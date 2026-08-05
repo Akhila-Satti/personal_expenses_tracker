@@ -1,7 +1,7 @@
 import { Link, useNavigate, Outlet } from "react-router-dom";
 import "../css/Layout.css";
 import { useState, useEffect } from "react";
-
+import logoutImage from "../assets/logout.jpg";
 function Layout() {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ function Layout() {
         </div>
         <button id="logout" onClick={logout}>
           Logout
-          <img src="./src/assets/logout.jpg" alt="logout" />
+          <img src={logoutImage} alt="logout" />
         </button>
       </div>
 
