@@ -5,11 +5,6 @@ const latestexpenses = async (req, res) => {
 
   const endOfDay = new Date();
   endOfDay.setHours(24, 0, 0, 0);
-  if (!req.id) {
-    return res.status(401).json({
-      message: "Unauthorised",
-    });
-  }
   const todayExpenses = await Expense.find({
     userId: req.id,
     spentOn: {

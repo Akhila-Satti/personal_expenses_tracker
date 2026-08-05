@@ -18,9 +18,16 @@ const displayAllexpenses = async (req, res) => {
   }
 
   if (req.query.spentDate) {
-    const t = new Date(req.query.spentDate);
-    t.setHours(0, 0, 0, 0);
-    filter.spentOn = t;
+    const start = new Date(req.query.spentDate);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(req.query.spentDate);
+    end.setHours(23, 59, 59, 999);
+
+    filter.spentOn = {
+      $gte: start,
+      $lte: end,
+    };
   }
 
   const expenses = await Expense.find(filter);
