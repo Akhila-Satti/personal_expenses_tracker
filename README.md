@@ -1,6 +1,13 @@
+
 # 💰 Budget Buddy-Personal Expense Tracker
 
 A full-stack Personal Expense Tracker that helps users manage their budgets and expenses efficiently. Users can create budgets, record expenses, monitor spending through an interactive dashboard, and visualize financial data using charts.
+
+## 🌐 Live Demo
+
+**Frontend:** https://personal-expenses-tracker-frontend.onrender.com
+
+**Backend API:** https://personal-expenses-tracker-backend-d23h.onrender.com
 
 ---
 
@@ -91,7 +98,7 @@ Personal-Expense-Tracker/
 ### Clone the repository
 
 ```bash
-git clone https://github.com/Akhila-Satti/personal_expenses_tracker
+git clone https://github.com/Akhila-Satti/personal_expenses_tracker.git
 ```
 
 ---
