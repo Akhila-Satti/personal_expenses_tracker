@@ -13,7 +13,7 @@ function DisplayExpense(props) {
       
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/expenses?searchBudget=${props.searchBudget}&searchExpense=${props.searchExpense}&spentDate=${props.spentDate}`,
+          `${import.meta.env.VITE_API_URL}/api/expenses?searchBudget=${props.searchBudget}&searchExpense=${props.searchExpense}&spentDate=${props.spentDate}`,
           authorization(),
         );
         if (response.data.length === 0) {

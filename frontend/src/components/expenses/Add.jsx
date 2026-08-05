@@ -12,7 +12,7 @@ function AddExpense() {
 useEffect(()=>{
  
     const findBudgetNames=async()=>{
-      const response=await axios.get('http://localhost:5000/api/budgets',authorization());
+      const response=await axios.get(`${import.meta.env.VITE_API_URL}/api/budgets`,authorization());
       setBudgetNames(response.data);
       setLoading(false);
     }
@@ -38,7 +38,7 @@ useEffect(()=>{
       
   
       setErrorMessage("")
-    await axios.post(`http://localhost:5000/api/expenses/${budgetId}`,d,authorization());
+    await axios.post(`${import.meta.env.VITE_API_URL}/api/expenses/${budgetId}`,d,authorization());
     
     navigate('/expenses');
   }

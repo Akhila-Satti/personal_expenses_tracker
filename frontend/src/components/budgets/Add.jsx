@@ -19,7 +19,7 @@ function AddBudget() {
     };
     try{
       setErrorMessage("")
-    await axios.post('http://localhost:5000/api/budgets/',d,authorization());
+    await axios.post(`${import.meta.env.VITE_API_URL}/api/budgets/`,d,authorization());
     
     navigate('/budgets');
   }

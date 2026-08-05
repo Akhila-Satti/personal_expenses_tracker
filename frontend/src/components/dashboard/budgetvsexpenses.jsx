@@ -13,7 +13,7 @@ function BudgetvsExpenses() {
       
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/dashboard/budgetvsexpenses",
+          `${import.meta.env.VITE_API_URL}/api/dashboard/budgetvsexpenses`,
           authorization(),
         );
         if (response.data.length === 0) {

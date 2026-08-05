@@ -13,7 +13,7 @@ function DisplayBudget(props) {
       
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/budgets?search=${props.searchText}`,
+          `${import.meta.env.VITE_API_URL}/api/budgets?search=${props.searchText}`,
           authorization(),
         );
         if (response.data.length === 0) {

@@ -12,7 +12,7 @@ function Dashboard() {
     const getQuote = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/dashboard/quote"
+          `${import.meta.env.VITE_API_URL}/api/dashboard/quote`
         );
         setQuote(res.data.quote);
         setAuthor(res.data.author);

@@ -13,7 +13,7 @@ function SignUp(){
     const password=e.target.password.value;
     try{
       setErrorMessage("");
-      await axios.post('http://localhost:5000/api/signup',{firstname,lastname,email,password});
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/signup`,{firstname,lastname,email,password});
       navigate('/');
 
     }catch (err){

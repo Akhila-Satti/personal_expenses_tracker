@@ -16,7 +16,7 @@ function EditBudget() {
      
     const prevdata=async ()=>{
       try{
-      const response=await axios.get(`http://localhost:5000/api/budgets/${params.updateId}`,authorization());
+      const response=await axios.get(`${import.meta.env.VITE_API_URL}/api/budgets/${params.updateId}`,authorization());
       setBudgetName(response.data.bn);
 setFromdate(response.data.from.split("T")[0]);
 setTodate(response.data.to.split("T")[0]);
@@ -44,7 +44,7 @@ const editBudget= async(e)=>{
     
     try{
       setErrorMessage("")
-    await axios.patch(`http://localhost:5000/api/budgets/${params.updateId}`,d,authorization());
+    await axios.patch(`${import.meta.env.VITE_API_URL}/api/budgets/${params.updateId}`,d,authorization());
     
     navigate('/budgets');
   }

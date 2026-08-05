@@ -12,7 +12,7 @@ function RecentExpenses() {
       
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/dashboard/latestexpenses",
+          `${import.meta.env.VITE_API_URL}/api/dashboard/latestexpenses`,
           authorization,
         );
         if (response.data.length === 0) {

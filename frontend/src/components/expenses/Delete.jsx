@@ -11,7 +11,7 @@ function DeleteExpense() {
       
       try {
         await axios.delete(
-          `http://localhost:5000/api/expenses/${params.budgetId}/${params.deleteId}`,
+          `${import.meta.env.VITE_API_URL}/api/expenses/${params.budgetId}/${params.deleteId}`,
           authorization(),
         );
         navigate("/expenses");

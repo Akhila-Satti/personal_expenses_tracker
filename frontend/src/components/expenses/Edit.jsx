@@ -16,7 +16,7 @@ function EditExpense() {
     const prevdata = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/expenses/${params.expenseId}`,
+          `${import.meta.env.VITE_API_URL}/api/expenses/${params.expenseId}`,
           authorization(),
         );
        
@@ -45,7 +45,7 @@ function EditExpense() {
       
       setErrorMessage("");
       await axios.patch(
-        `http://localhost:5000/api/expenses/${params.budgetId}/${params.expenseId}`,
+        `${import.meta.env.VITE_API_URL}/api/expenses/${params.budgetId}/${params.expenseId}`,
         d,
         authorization,
       );

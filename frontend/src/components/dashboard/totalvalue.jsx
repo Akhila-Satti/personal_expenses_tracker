@@ -12,7 +12,7 @@ function TotalValue() {
       
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/dashboard/totalvalue",
+          `${import.meta.env.VITE_API_URL}/api/dashboard/totalvalue`,
           authorization(),
         );
        if (!response.data) {
