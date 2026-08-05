@@ -13,7 +13,7 @@ function RecentExpenses() {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/dashboard/latestexpenses`,
-          authorization,
+          authorization(),
         );
         if (response.data.length === 0) {
           return setMessage("No data to display");

@@ -18,7 +18,7 @@
             });
         }
        req.id=decoded.id;
-        req.email=decoded.email;
+       req.email=decoded.email;
         next();
         
     })
