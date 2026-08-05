@@ -50,10 +50,14 @@ budgetFrom.setHours(0, 0, 0, 0);
 const budgetTo = new Date(targetBudget.to);
 budgetTo.setHours(0, 0, 0, 0);
 
-const today = new Date().toLocaleDateString("en-CA", {
-    timeZone: "Asia/Kolkata",
+const formatter = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Kolkata",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
 });
-today.setHours(0,0,0,0)
+
+const today = formatter.format(new Date());
 
 if (
     expenseDate < budgetFrom ||
